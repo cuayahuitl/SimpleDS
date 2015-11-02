@@ -1,1 +1,0 @@
-java -cp ../lib/weka.jar weka.classifiers.trees.RandomForest -I 10 -K 0 -S 1 -t ../models/demonstrations.arff -d ../models/demonstrations.model

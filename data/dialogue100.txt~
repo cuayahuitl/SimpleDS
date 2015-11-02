@@ -1,0 +1,44 @@
+SYS:[Salutation(greeting)]"Hello!"
+USR:null
+SYS:[Request(food,price)]"What type of food and price range are you looking for?"
+USR:"I need cheap indian food"
+SYS:[Apology(food,price)]"Sorry, I didn't get that. What food and price?"
+USR:"I need cheap indian food"
+SYS:[Apology(food)]"Sorry, I didn't get that. What type of food?"
+USR:"I am desperate for indian food"
+SYS:[Apology(food,price)]"Sorry, I didn't get that. What food and price?"
+USR:"I need cheap indian food"
+SYS:[ExpConfirm(food=$food)]"Did you say indian food?"
+USR:"Yes I did"
+SYS:[Request(area)]"What area are you looking for?"
+USR:"In the east"
+SYS:[ImpConfirm(price=$price,area=$area)]"Okay, cheap food in the east."
+USR:null
+SYS:[Apology(price,area)]"Sorry, I didn't get that. What price and area?"
+USR:"I want cheap food in the east"
+SYS:[Apology(area)]"Sorry, I didn't get that. What area?"
+USR:"In the east"
+SYS:[Apology(price,area)]"Sorry, I didn't get that. What price and area?"
+USR:"I want cheap food in the east"
+SYS:[ImpConfirm(price=$price,area=$area)]"Okay, cheap food in the east."
+USR:null
+SYS:[ExpConfirm(area=$area)]"Did you say in the east?"
+USR:"Yes I did"
+SYS:[Apology(price)]"Sorry, I didn't get that. What price range?"
+USR:"cheap food"
+SYS:[ImpConfirm(price=$price)]"Okay, cheap."
+USR:null
+SYS:[Apology(price)]"Sorry, I didn't get that. What price range?"
+USR:"cheap food"
+SYS:[ImpConfirm(price=$price)]"Okay, cheap."
+USR:null
+SYS:[ExpConfirm(food=$food,price=$price,area=$area)]"Did you say cheap indian food in the east?"
+USR:"Yes I did"
+SYS:[Retrieve(info)]"Let me see."
+USR:null
+SYS:[Provide(known)]"Restaurant X is an excellent choice ..."
+USR:null
+SYS:[Request(more)]"Anything else?"
+USR:"no"
+SYS:[Salutation(closing)]"Okay, talk to you soon. Bye!"
+USR:null

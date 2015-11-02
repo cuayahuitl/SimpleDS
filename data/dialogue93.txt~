@@ -1,0 +1,16 @@
+SYS:[Salutation(greeting)]"Hello!"
+USR:null
+SYS:[Request(food,price,area)]"What type of food, price range, and area are you looking for?"
+USR:"I am looking for reasonably priced chinese food in the west of town"
+SYS:[ImpConfirm(food=$food,area=$area)]"Okay, chinese food in the west."
+USR:null
+SYS:[ExpConfirm(food=$food,price=$price,area=$area)]"Did you say reasonably priced chinese food in the west?"
+USR:"Yes I did"
+SYS:[Retrieve(info)]"Let me see."
+USR:null
+SYS:[Provide(unknown)]"I'm very sorry, I didn't find a match with those preferences."
+USR:null
+SYS:[AskFor(more)]"Anything else?"
+USR:"no"
+SYS:[Salutation(closing)]"Okay, talk to you soon. Bye!"
+USR:null

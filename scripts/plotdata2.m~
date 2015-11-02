@@ -1,0 +1,73 @@
+arg_list = argv ();
+if (nargin < 1) 
+  printf ("Usage: sampleplot.m InputDataFile1 InputDataFile2 InputDataFile3 [OutputFile]");
+  exit
+else 
+  inputfile1 = arg_list{1};#e.g."sampledata.txt";
+  inputfile2 = arg_list{2};#e.g."sampledata.txt";
+endif
+
+fid=fopen(inputfile1); 
+line=0;
+data1=zeros(2,3);
+line_i=1; 
+while (-1 ~= (line=fgetl(fid))) 
+  data1(line_i++,:)=str2num(line); 
+end 
+fclose(fid);  
+
+fid=fopen(inputfile2); 
+line=0;
+data2=zeros(2,3);
+line_i=1; 
+while (-1 ~= (line=fgetl(fid))) 
+  data2(line_i++,:)=str2num(line); 
+end 
+fclose(fid);  
+
+subplot (2, 1, 1)
+x = data1(:,1); 
+y = data1(:,2);
+h = plot(x, y, 'r-', 'LineWidth', 2) 
+#h = loglog(x, y, 'r-', 'LineWidth', 2) 
+#h = semilogx(x, y, 'r-', 'LineWidth', 2) 
+#h = semilogy(x, y, 'r-', 'LineWidth', 2) 
+#h = errorbar(x, y, 'r-', 'LineWidth', 2) 
+set (h, "xdatasource", "x"); 
+set (h, "ydatasource", "y"); 
+grid on;
+title('DRL Agent vs. Heuristic Opponents');
+xlabel('Learning Steps (no. experiences)');
+ylabel('Average Reward');
+##print -landscape -tight eraseme-plot2.pdf
+##print -djpg eraseme-plot2.jpg  
+
+subplot (2, 1, 2)
+x = data2(:,1); 
+y = data2(:,2);
+h = plot(x, y, 'b-', 'LineWidth', 2) 
+#h = loglog(x, y, 'b-', 'LineWidth', 2) 
+#h = semilogx(x, y, 'b-', 'LineWidth', 2) 
+#h = semilogy(x, y, 'b-', 'LineWidth', 2) 
+#h = errorbar(x, y, 'b-', 'LineWidth', 2) 
+set (h, "xdatasource", "x"); 
+set (h, "ydatasource", "y"); 
+grid on;
+title('DRL Agent vs. Supervised Opponents');
+xlabel('Learning Steps (no. experiences)');
+ylabel('Average Reward');
+##print -landscape -tight eraseme-plot2.pdf
+##print -djpg eraseme-plot2.jpg  
+
+pause
+
+if (nargin == 3)
+  outputfile = arg_list{3};
+  orient("tall")
+  saveas(1, outputfile);#e.g."eraseme-plot2.png"
+endif
+
+## Change the y data and refresh the plot 
+#y = sin (x.^2); 
+#refreshdata 
+#sleep(2);

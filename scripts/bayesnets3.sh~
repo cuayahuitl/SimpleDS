@@ -1,0 +1,56 @@
+#!/bin/sh
+
+#################################################################################### 
+# @description This script runs the WEKA framework for training Bayesian networks, 
+#              and stores them into a readable format by JavaBayes 
+# @author <ahref="mailto:heriberto.cuayahuitl@dfki.de">Heriberto Cuayahuitl</a>
+####################################################################################
+
+WEKA_PATH=/Users/heriberto/Software/weka-3-6-11/weka.jar
+#APP_PATH=../../../../share/resources/dialoguepolicies/policies/quiz
+#APP_PATH=/Users/heriberto/Edinburgh/workspace/InteractiveTaxi/resources
+#APP_PATH=/Users/heriberto/Edinburgh/workspace/STAC2/simulation/
+#APP_PATH=/Users/heriberto/Edinburgh/workspace/STAC-SimpleSimulator2/simulation/
+APP_PATH=/Users/heriberto/Edinburgh/workspace/SimpleDialogueSystem/models/
+#APP_PATH=/Users/heriberto/Edinburgh/workspace/STAC2.1/simulation/
+#APP_PATH=/Users/heriberto/Edinburgh/workspace/ParlanceNLG-Extended/resources/arff/
+#APP_PATH=/Users/heriberto/Edinburgh/workspace/ParlanceNLG-Extended/data/MIT-train/
+#APP_PATH=../../../../../Edinburgh/workspace/ParlanceDM/bayesnets
+#APP_PATH=../../../../../Edinburgh/workspace/SpectralClustering/resources
+#OpenRLDS_PATH=/Users/heriberto/Software/openrlds-1-0/OpenRLDS.jar
+OpenRLDS_PATH=/Users/heriberto/Edinburgh/components/dialogue-fst/lib/java/OpenRLDS.jar
+
+FILES=$APP_PATH/*.arff 
+for f in $FILES; do 
+  FILE_NAME="${f%.*}"
+  APP_TRAINING_DATA="$FILE_NAME".arff 
+  APP_BAYESNET_FILE="$FILE_NAME".bif
+
+  if [ $1 = "training" ] ; then 
+    java -Xmx4048M -cp $WEKA_PATH \
+    weka.classifiers.bayes.BayesNet -t $APP_TRAINING_DATA -g -D -Q \
+    weka.classifiers.bayes.net.search.local.K2 -- -P 1 -S AIC -E \
+    weka.classifiers.bayes.net.estimate.SimpleEstimator > $APP_BAYESNET_FILE
+    java -Xmx4048M -cp $OpenRLDS_PATH openrlds.util.CharacterUtil $APP_BAYESNET_FILE
+
+  elif [ $1 = "testing" ] ; then 
+    java -Xmx4048M -cp $WEKA_PATH \
+    weka.classifiers.bayes.BayesNet -t $APP_TRAINING_DATA -D -Q \
+    weka.classifiers.bayes.net.search.local.K2 -- -P 2 -S AIC -E \
+    weka.classifiers.bayes.net.estimate.SimpleEstimator -- -A 3.0
+
+  else 
+    echo "usage: bayesnets.sh (training | testing)" 
+  fi 
+done
+
+
+#elif [ $1 = "testing" ] ; then java -Xmx2048M -cp $WEKA_PATH
+#weka.classifiers.bayes.BayesNet -t $APP_TRAINING_DATA -D -Q
+#weka.classifiers.bayes.net.search.local.K2 -- -P 3 -S ENTROPY -E
+#weka.classifiers.bayes.net.estimate.SimpleEstimator -- -A 1.0
+
+
+#java -Xmx2048M -cp ../../lib/java/weka.jar weka.classifiers.bayes.BayesNet -t ../../../../../Edinburgh/workspace/BeliefTrackingChallenge/data/letsgo-perslot-to.desc.arff -g -D -Q weka.classifiers.bayes.net.search.local.K2 -- -P 2 -S ENTROPY -E weka.classifiers.bayes.net.estimate.SimpleEstimator > ../../../../../Edinburgh/workspace/BeliefTrackingChallenge/data/letsgo-perslot-to.desc.bif
+
+#java -Xmx2048M -cp /Users/heriberto/Software//weka-3-6-8/weka.jar weka.filters.supervised.attribute.AttributeSelection -E "weka.attributeSelection.CfsSubsetEval " -S "weka.attributeSelection.BestFirst -D 1 -N 5" -b -i ../data/dact/Entrainement.arff -o ../data/dact/Entrainement_wFeatureSelection.arff -r ../data/dact/Entrainement.arff -s ../data/dact/Entrainement_wFeatureSelection.arff

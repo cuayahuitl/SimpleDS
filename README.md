@@ -119,5 +119,6 @@ You may want to set Verbose=false during training and Verbose=true during tests.
 
 COMMENTS/QUESTIONS?
 -------------------
-Contact: Heriberto Cuayahuitl
+Contact: [Heriberto Cuayahuitl](http://www.macs.hw.ac.uk/~hc213)
+
 Email: h.cuayahuitl@gmail.com

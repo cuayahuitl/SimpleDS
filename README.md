@@ -30,6 +30,8 @@ EXECUTION
 
 >scripts/run.sh train
 
+![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS-train.png "Example screenshot of SimpleDS during training (Dialogues=2000, Verbose=false)")
+
 >[From the command line, press Ctrl+C for termination]
 
 or 
@@ -37,6 +39,8 @@ or
 >cd YourPath/SimpleDialogueSystem
 
 >scripts/run.sh test
+
+![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS-test.png "Example screenshot of SimpleDS at test time (Dialogues=1, Verbose=true)")
 
 >[From the command line, press Ctrl+C for termination]
 

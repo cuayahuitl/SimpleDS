@@ -1,4 +1,4 @@
-Dialogues=1000
+Dialogues=2000
 Verbose=false
 SysResponses=resources/SysResponses.txt
 UsrResponses=resources/UsrResponses.txt

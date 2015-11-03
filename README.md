@@ -115,10 +115,7 @@ MinimumEpsilon=This number defines the minimum epsilon during learning (real num
 
 BatchSize=This number defines the batch size (positive integer, e.g. 32 or 64)
 
-You may want to set Verbose=false during training and Verbose=true during tests.
-You may also want to set a high number of dialogues during training and a low one during tests.
-You may want to change the system/user responses if you want different verbalisations. If this
-is the case, then you will also want to update the demonstration dialogues in the folder data/.
+You may want to set Verbose=false during training and Verbose=true during tests. You may also want to set a high number of dialogues during training (e.g. Dialogues=2000) and a low one during tests (e.g. Dialogues=1). You may want to change the system/user responses if you want different verbalisations. If this is the case, then you will also want to update the demonstration dialogues in the folder YourPath/SimpleDS/data/.
 
 COMMENTS/QUESTIONS?
 -------------------

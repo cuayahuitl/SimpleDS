@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import simpleDS.util.IOUtil;
+import simpleDS.util.Logger;
 import simpleDS.util.StringUtil;
 
 public class SimpleInteractionPolicy {
@@ -22,13 +23,17 @@ public class SimpleInteractionPolicy {
 	public SimpleActions simpleActions;
 	private boolean verbose = false;
 	private int numSlots2Confirm = 0;
+	//private int numSlotsConfirmed = 0;
 	private float noiseLevel = 0;
 
-	public SimpleInteractionPolicy(String sysResponsesFile, String slots2Confirm, String noiseLevel, boolean verbose) {
-		this.verbose = verbose;
-		this.numSlots2Confirm = Integer.parseInt(slots2Confirm);
-		this.noiseLevel = Float.parseFloat(noiseLevel);
+	public SimpleInteractionPolicy(HashMap<String,String> configurations) {
+		verbose = configurations.get("Verbose").equals("true") ? true : false;
+		this.numSlots2Confirm = Integer.parseInt(configurations.get("SlotsToConfirm"));
+		this.noiseLevel = Float.parseFloat(configurations.get("NoiseLevel"));
+		
+		String sysResponsesFile = configurations.get("SysResponses");
 		simpleActions = new SimpleActions(sysResponsesFile);
+		
 		slotsRequested = new HashMap<String,String>();
 		slotsConfirmed = new HashMap<String,String>();
 		lastInfo = new HashMap<String,String>();
@@ -43,6 +48,7 @@ public class SimpleInteractionPolicy {
 		updateLastInfo(new HashMap<String,String>(), null);
 		this.historic = new HashMap<String,Integer>();
 		this.simpleActions.resetSelectedActions();
+		//this.numSlotsConfirmed = 0;
 	}
 
 	public String getAction_Unfolded(String action) {
@@ -163,6 +169,12 @@ public class SimpleInteractionPolicy {
 		setHistoricInfo(dict.get("action_sys_key"));
 		setHistoricInfo(dict.get("action_usr_key"));
 		setSlots(dict.get("action_usr_val"));
+		
+		if (verbose) {
+			Logger.debug(this.getClass().getName(), "updateLastInfo", "slotsRequested="+slotsRequested);
+			Logger.debug(this.getClass().getName(), "updateLastInfo", "slotsConfirmed="+slotsConfirmed);
+			System.out.println();
+		}
 	}
 
 	public String getLastInfoParam(String param) {
@@ -173,7 +185,7 @@ public class SimpleInteractionPolicy {
 		return simpleActions.getProbableActions(state, steps, slotsRequested, slotsConfirmed, this.numSlots2Confirm);
 	}
 	
-	public String getRewards(String stateWithoutNoise, String actions, boolean end) {
+	public String getRewards(String stateWithoutNoise, String actions, boolean end, int steps) {
 		String output = "";
 
 		String datalikeRewards = simpleActions.getDataPredictions(stateWithoutNoise, actions);
@@ -182,27 +194,20 @@ public class SimpleInteractionPolicy {
 		for (int i=0; i<dataRewards.size(); i++) {
 			String action = simpleActions.getAction(""+i);
 			action = (i==dataRewards.size()-1) ? "LAST" : action;
-			double bonusReward = getBonusReward(action, end);
+			double bonusReward = getBonusReward(action, end, steps);
 			double dataReward = Double.parseDouble(dataRewards.get(i));
-			double reward = bonusReward + dataReward -1;
+			double reward = (bonusReward*0.5)+(dataReward*0.5)-0.1;
 			output += (output.equals("")) ? ""+reward : ","+reward;
 		}
+		//numSlotsConfirmed = slotsConfirmed.size();
 		
 		return output;
 	}
 	
-	public double getBonusReward(String lastSysAction, boolean end) {
+	public double getBonusReward(String lastSysAction, boolean end, int steps) {
 		double reward = 0;
 		
-		reward = slotsConfirmed.size()*10;
-		
-		/*if (end || slotsConfirmed.size()==this.numSlots2Confirm) {
-			reward = 10;
-		} else if (end) { 
-			reward = -10;
-		//} else {
-		//	reward = ((double) (slotsConfirmed.size()+slotsRequested.size()+1)/((this.numSlots2Confirm*2)+1))*1;
-		}*/
+		reward = (double)slotsConfirmed.size()/this.numSlots2Confirm;
 
 		return reward;
 	}

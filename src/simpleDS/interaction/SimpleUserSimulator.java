@@ -100,17 +100,19 @@ public class SimpleUserSimulator {
 
 		return response;
 	}
-	
-	public String getASROutput(String words) {
-		String output = "";
-		ArrayList<String> list = StringUtil.getArrayListFromString(words, " \"");
-
-		for (String word : list) {
-			String noisyWord = word +"("+ Math.random() +")";
-			output += output.equals("") ? noisyWord : " "+noisyWord;
-		}
 		
-		return output;
+	public void updateUserGoal(String response_asr) {
+		if (response_asr == null || response_asr.equals("")) return;
+	
+		for (String slot : slots.keySet()) {
+			String slotValues = slots.get(slot);
+
+			for (String value : StringUtil.getArrayListFromString(slotValues, "|\"")) {
+				if (response_asr.indexOf(value) >= 0) {
+					usrGoal.put(slot, value);
+				}
+			}
+		}
 	}
 	
 	public HashMap<String,String> getUsrGoal() {

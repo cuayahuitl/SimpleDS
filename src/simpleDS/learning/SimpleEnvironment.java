@@ -4,6 +4,7 @@
  *              The former extracts training instances from example dialogues at runtime.
  * 
  * @history 2.Nov.2015 Beta version
+ *          5.Nov.2015 Methods for returning simulated and real speech recognition outputs.
  *              
  * @author <ahref="mailto:h.cuayahuitl@gmail.com">Heriberto Cuayahuitl</a>
  */
@@ -15,13 +16,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import simpleDS.interaction.SimpleInteractionPolicy;
+import simpleDS.interaction.SimpleUserSimulator;
 import simpleDS.util.IOUtil;
 import simpleDS.util.Logger;
+import simpleDS.util.StringUtil;
 import simpleDS.util.Vocabulary;
 
 public class SimpleEnvironment {
 	private Vocabulary vocabulary;
 	private boolean verbose = false;
+	public SimpleUserSimulator userSimulator;
 	public SimpleInteractionPolicy interactionPolicy;
 
 	public SimpleEnvironment(HashMap<String,String> configurations) {
@@ -32,13 +36,19 @@ public class SimpleEnvironment {
 		String slotsFile = configurations.get("SlotValues");
 		String demonstrationsPath = configurations.get("DemonstrationsPath");
 		String demonstrationsFile = configurations.get("DemonstrationsFile");
-		String slots2Confirm = configurations.get("SlotsToConfirm");
-		String noiseLevel = configurations.get("NoiseLevel");
+		String minimumProbability = configurations.get("MinimumProbability");
 		
-		interactionPolicy = new SimpleInteractionPolicy(sysResponsesFile, slots2Confirm, noiseLevel, verbose);
+		userSimulator = new SimpleUserSimulator(configurations);
+		interactionPolicy = new SimpleInteractionPolicy(configurations);
 		vocabulary = new Vocabulary(sysResponsesFile, usrResponsesFile, slotsFile);
 		generateTrainingDataFromDemonstrations(demonstrationsPath, demonstrationsFile);
-		interactionPolicy.simpleActions.createActionPredictor(demonstrationsFile);
+		interactionPolicy.simpleActions.createActionPredictor(demonstrationsFile, minimumProbability);
+	}
+	
+	public String getNumInputOutputs() {
+		int inputs = vocabulary.getVocabularySize();
+		int outputs = interactionPolicy.simpleActions.getActionSetSize();
+		return inputs+","+outputs;
 	}
 
 	public String getEnvironmentState(boolean withNoise) {
@@ -54,6 +64,32 @@ public class SimpleEnvironment {
 		return state;
 	}
 	
+	public String getSimulatedSpeechRecognitionOutput(String words) {
+		String output = "";
+		ArrayList<String> list = StringUtil.getArrayListFromString(words, " \"");
+
+		for (String word : list) {
+			String noisyWord = word +"("+ Math.random() +")";
+			output += output.equals("") ? noisyWord : " "+noisyWord;
+		}
+		
+		return output;
+	}
+
+	public String getRealSpeechRecognitionOutput(String nBestList) {
+		String output = "";
+		HashMap<String,Double> wordDist = StringUtil.getWordDistributionFromRawText(nBestList);
+		
+		for (String word : vocabulary.getWordList()) {
+			if (wordDist.containsKey(word)) {
+				String noisyWord = word +"("+ wordDist.get(word) +")";
+				output += output.equals("") ? noisyWord : " "+noisyWord;
+			}
+		}		
+		
+		return output;
+	}
+
 	private ArrayList<String> getWordFeaturesFromParam(String lastSysResponse, String lastUsrResponse, boolean withNoise) {
 		ArrayList<String> featureVector = new ArrayList<String>();
 

@@ -1,21 +1,25 @@
-Dialogues=2000
-Verbose=false
-SysResponses=resources/SysResponses.txt
-UsrResponses=resources/UsrResponses.txt
-SlotValues=resources/SlotValues.txt
-DemonstrationsPath=data/
+Dialogues=1
+Verbose=true
+Language=english
+SysResponses=resources/%Language%/SysResponses.txt
+UsrResponses=resources/%Language%/UsrResponses.txt
+SlotValues=resources/%Language%/SlotValues.txt
+DemonstrationsPath=data/%Language%
 DemonstrationsFile=models/demonstrations.arff
+MinimumProbability=0.001
 SlotsToConfirm=3
 NoiseLevel=0
+OutputPath=results
 
 AddressPort=ws://localhost:8082/simpleds
 SavingFrequency=2500
 
-NumInputs=82 
-NumActions=35
-LearningSteps=10000
-ExperienceSize=5000
+LearningSteps=20000
+ExperienceSize=10000
 BurningSteps=100
 DiscountFactor=0.7
-MinimumEpsilon=0.01
+MinimumEpsilon=0.001
 BatchSize=32
+
+AndroidSupport=false
+SocketServerPort=2015

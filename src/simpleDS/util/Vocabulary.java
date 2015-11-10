@@ -61,4 +61,8 @@ public class Vocabulary {
 	public ArrayList<String> getWordList() {
 		return words;
 	}
+
+	public int getVocabularySize() {
+		return words.size();
+	}
 }

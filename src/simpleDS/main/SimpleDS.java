@@ -1,5 +1,6 @@
 /* @description This is the main class for implementing SimpleDS learning agents.
  *              It currently establishes communication with a JavaScript client ('SimpleAgent').
+ *              It also establishes speech-based communication with an Android App via socketServer. 
  *              This class generates training/test dialogues according to a configuration file,
  *              see README.txt for more information.
  * 
@@ -12,24 +13,49 @@ package simpleDS.main;
 
 import java.util.HashMap;
 
-import simpleDS.interaction.SimpleUserSimulator;
 import simpleDS.learning.SimpleAgent;
 import simpleDS.learning.SimpleEnvironment;
+import simpleDS.networking.SimpleSocketServer;
 import simpleDS.util.IOUtil;
 import simpleDS.util.Logger;
+import simpleDS.util.StringUtil;
 
 public class SimpleDS {
 	private HashMap<String,String> configurations;
-	private SimpleUserSimulator userSimulator;
 	private SimpleEnvironment environment;
 	private SimpleAgent simpleAgent;
+	private SimpleSocketServer socketServer;
 	private boolean verbose = false;
 
 	public SimpleDS(String configFile) {
 		parseConfigFile(configFile);
 		initialiseEnvironment();
+	}
+	
+	private void initialiseEnvironment() {
+		environment = new SimpleEnvironment(configurations);
+		initialiseSocketServer();
+		initialiseWebServer();
+	}
 
-		simpleAgent = new SimpleAgent();
+	private void parseConfigFile(String configFile) {
+		configurations = new HashMap<String,String>();
+		IOUtil.readHashMap(configFile, configurations, "=");
+		StringUtil.expandAbstractKeyValuePairs(configurations);
+		IOUtil.printHashMap(configurations, "CONFIGURATIONS");
+		verbose = configurations.get("Verbose").equals("true") ? true : false;
+	}
+
+	private void initialiseSocketServer() {
+		if (configurations.get("AndroidSupport").equals("true")) {
+			String port = configurations.get("SocketServerPort");
+			socketServer = new SimpleSocketServer(port);
+			socketServer.createServer();
+		}
+	}
+	
+	private void initialiseWebServer() {
+		simpleAgent = new SimpleAgent(environment.getNumInputOutputs());
 		simpleAgent.start();
 
 		synchronized(simpleAgent) {
@@ -44,6 +70,7 @@ public class SimpleDS {
 			}
 		}
 		System.exit(0);
+
 	}
 
 	private void interactionManagement() {
@@ -52,7 +79,7 @@ public class SimpleDS {
 		long numTimeSteps = 0;
 
 		for (int i=1; i<=numDialogues; i++) {
-			environment.interactionPolicy.resetUserInfo(userSimulator);
+			environment.interactionPolicy.resetUserInfo(environment.userSimulator);
 			int steps = 1;
 			while(true) {		
 				dict.put("action_sys_key", getSystemAction_Key(steps, i, false));
@@ -64,9 +91,9 @@ public class SimpleDS {
 				}
 
 				dict.put("action_usr_key", getUserAction_Key(dict.get("action_sys_key"), dict.get("action_sys_val")));
-				dict.put("action_usr_val", getUserAction_Val(dict.get("action_usr_key")));
 				dict.put("response_usr", getUserResponse(dict.get("action_usr_key")));
 				dict.put("response_asr", getSpeechRecOutput(dict.get("response_usr")));
+				dict.put("action_usr_val", getUserAction_Val(dict.get("action_usr_key")));
 				if (dict.get("response_usr") != null && verbose) {
 					String usr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_usr");
 					String asr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_asr");
@@ -74,9 +101,10 @@ public class SimpleDS {
 					Logger.debug("SympleDS", "UM", steps+" USR:"+asr);
 				}
 
-				environment.interactionPolicy.updateLastInfo(dict, userSimulator);
+				environment.interactionPolicy.updateLastInfo(dict, environment.userSimulator);
 				if (endOfInteractionReached()) {
 					getSystemAction_Key(steps, i, true);
+					if (verbose) System.out.print("\n\n");
 					break;
 				}
 				steps++;
@@ -103,7 +131,7 @@ public class SimpleDS {
 		String actions = environment.interactionPolicy.getAllowedActions(stateWithoutNoise, steps);
 
 		if (simpleAgent != null) {
-			String rewards = environment.interactionPolicy.getRewards(stateWithoutNoise, actions, end);
+			String rewards = environment.interactionPolicy.getRewards(stateWithoutNoise, actions, end, steps);
 			simpleAgent.sendMessage("state="+stateWithNoise+"|actions="+actions+"|rewards="+rewards+"|dialogues="+dialogues);
 			String learnedAction = null;
 			while (learnedAction == null) {
@@ -134,35 +162,42 @@ public class SimpleDS {
 	}
 
 	private String getSystemResponse(String action_sys_key) {
-		return environment.interactionPolicy.getResponse(action_sys_key);
+		String response = environment.interactionPolicy.getResponse(action_sys_key);
+		
+		if (socketServer != null && response != null){
+			socketServer.send(response);
+		}
+		
+		return response;
 	}
 
 	private String getUserAction_Key(String action_sys_key, String action_sys_val) {
-		return userSimulator.getAction(action_sys_key, action_sys_val);
+		return environment.userSimulator.getAction(action_sys_key, action_sys_val);
 	}
 
 	private String getUserAction_Val(String action_sys_val) {
-		return userSimulator.getAction_Unfolded(action_sys_val);
+		return environment.userSimulator.getAction_Unfolded(action_sys_val);
 	}
 
 	private String getUserResponse(String action_usr_key) {
-		return userSimulator.getResponse(action_usr_key);
+		String response = environment.userSimulator.getResponse(action_usr_key);
+		
+		if (socketServer != null && response != null){
+			response = socketServer.listen();
+		}
+		
+		return response;
 	}
 
 	private String getSpeechRecOutput(String response_usr) {
-		return userSimulator.getASROutput(response_usr);
-	}
-
-	private void initialiseEnvironment() {
-		userSimulator = new SimpleUserSimulator(configurations);
-		environment = new SimpleEnvironment(configurations);
-	}
-
-	private void parseConfigFile(String configFile) {
-		configurations = new HashMap<String,String>();
-		IOUtil.readHashMap(configFile, configurations, "=");
-		IOUtil.printHashMap(configurations, "CONFIGURATIONS");
-		verbose = configurations.get("Verbose").equals("true") ? true : false;
+		if (socketServer != null){
+			String response_asr = environment.getRealSpeechRecognitionOutput(response_usr);
+			environment.userSimulator.updateUserGoal(response_asr);
+			return response_asr;
+			
+		} else {
+			return environment.getSimulatedSpeechRecognitionOutput(response_usr);
+		}
 	}
 
 	public static void main(String[] args) {

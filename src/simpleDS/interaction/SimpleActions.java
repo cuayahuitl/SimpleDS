@@ -44,8 +44,8 @@ public class SimpleActions {
 		IOUtil.printHashMap(dialActs, "SYSTEM ACTIONS");
 	}
 
-	public void createActionPredictor(String demonstrationsFile) {
-		actionPredictor = new SimpleClassifier(demonstrationsFile);
+	public void createActionPredictor(String demonstrationsFile, String minimumProbability) {
+		actionPredictor = new SimpleClassifier(demonstrationsFile, minimumProbability);
 	}
 
 	public void defineActionSet() {
@@ -150,36 +150,36 @@ public class SimpleActions {
 		String set = "";
 		String mostProbableAction = this.getAction(mostProbableActionID);
 		if (mostProbableAction == null) return actions;
-		String dat = mostProbableAction.substring(0, mostProbableAction.indexOf("("));
 		String firstAction = this.actions_ID.get(this.fistBestAction);
 		String datFirstAction = firstAction.substring(0, firstAction.indexOf("("));
 		ArrayList<String> list = StringUtil.getArrayListFromString(actions, ",");
 
 		for (String actionID : this.actions_ID.keySet()) {
-			String action = this.getAction(actionID);			
+			String action = this.getAction(actionID);
+			String dat = action.substring(0, action.indexOf("("));
 			boolean hasConfirmedSlots = areGivenSlotsConfirmed(action, slotsConfirmed);
 			boolean hasRequestedSlots = areGivenSlotsConfirmed(action, slotsRequested);
 			boolean hasSlotsToRequest = (slotsRequested.size() == numSlots2Confirm) ? false : true;
 			boolean hasSlotsToConfirm = (slotsConfirmed.size() == numSlots2Confirm) ? false : true;
 			boolean isSlotCollectionTime = (slotsRequested.size()+slotsConfirmed.size() < numSlots2Confirm*2) ? true : false;
-
-			if (actionID.equals(this.fistBestAction) || this.selectedActions.contains(action) ||
-					//((action.startsWith("Request") || action.startsWith("Apology")) && !hasSlotsToRequest) ||
-					//((action.startsWith("Apology") || action.indexOf("Confirm")>=0) && !hasSlotsToConfirm) ||
-					(action.startsWith("Request") && !hasSlotsToRequest) ||
-					(action.startsWith("Apology") && !hasRequestedSlots) ||
-					(action.indexOf("Confirm")>=1 && !hasSlotsToConfirm) ||
-					((!action.startsWith("Request") && !action.startsWith("Apology") && action.indexOf("Confirm")==-1) && isSlotCollectionTime)) {
+			boolean isCollectionAction = (action.startsWith("Request") || action.startsWith("Apology") || action.indexOf("Confirm")>1) ? true : false;
+			
+			if (actionID.equals(this.fistBestAction) || dat.equals(datFirstAction) || selectedActions.contains(action) ||
+					(isCollectionAction==false && isSlotCollectionTime) ||
+					(isCollectionAction==true && !isSlotCollectionTime)) {
 				continue;
 			}
 
 			String response = this.dialActs.get(action);
 			response = StringUtil.getExpandedTemplate(response, slotsRequested);
+			
+			if (response == null || response.equals("null")) {
+				continue;
 
-			if ((list.contains(actionID) && response != null) || 
-					(response != null && dat.startsWith("Request") && !hasConfirmedSlots && !dat.equals(datFirstAction) && hasSlotsToRequest) ||
-					(response != null && dat.startsWith("Apology") && !hasConfirmedSlots && !dat.equals(datFirstAction) && hasSlotsToConfirm) ||
-					(response != null && dat.indexOf("Confirm")>=0 && !hasConfirmedSlots && !dat.equals(datFirstAction) && hasSlotsToConfirm)) {
+			} else if ((list.contains(actionID) && isCollectionAction==false) || 
+					(action.startsWith("Request") && hasRequestedSlots==false && hasConfirmedSlots==false && hasSlotsToRequest) ||
+					(action.startsWith("Apology") && hasRequestedSlots==true && hasConfirmedSlots==false && hasSlotsToConfirm) ||
+					(action.indexOf("Confirm")>=0 && hasRequestedSlots==true && hasConfirmedSlots==false && hasSlotsToConfirm)) {
 				set += (set.equals("")) ? actionID : ","+actionID;
 			}
 		}
@@ -203,30 +203,4 @@ public class SimpleActions {
 
 		return false;
 	}
-
-	/*public boolean areGivenSlotsConfirmedOnce(String action, HashMap<String,String> collection, HashMap<String,Integer> historic) {
-		String dat = action.substring(0, action.indexOf("("));
-		String slots = action.substring(action.indexOf("(")+1, action.indexOf(")"));
-		ArrayList<String> list = StringUtil.getArrayListFromString(slots, ",");
-
-		for (String slot : list) {
-			if (slot.indexOf("=")>0) {
-				slot = slot.substring(0, slot.indexOf("="));
-			}
-			
-			String dialAct = "";
-			if (action.startsWith("Request")) {
-				dialAct = dat+"("+slot+")";
-			} else {
-				dialAct = dat+"("+slot+"=$"+slot+")";
-			}
-
-			int count = (historic.get(dialAct) != null) ? historic.get(dialAct).intValue() : 0;
-			if (collection.containsKey(dialAct) && count == 1) {
-				return true;
-			}
-		}
-
-		return false;
-	}*/
 }

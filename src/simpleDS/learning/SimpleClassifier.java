@@ -21,9 +21,10 @@ import weka.core.converters.ConverterUtils.DataSource;
 public class SimpleClassifier {
 	private Instances instances;
 	private NaiveBayes classifier;
-	private final double MIN_PROBABILITY = 0.01;
+	private double minimumProbability;
 
-	public SimpleClassifier(String trainingFile) {
+	public SimpleClassifier(String trainingFile, String minimumProbability) {
+		this.minimumProbability = Double.parseDouble(minimumProbability);
 		loadData(trainingFile);
 		trainModel();
 	}
@@ -105,6 +106,7 @@ public class SimpleClassifier {
 			
 			for (int i=0; i<dist.length; i++) {
 				String attValue = attribute.value(i);
+				
 				if (dist[i]>bestScore) {
 					bestScore = dist[i];
 					bestLabel = attValue;
@@ -129,8 +131,8 @@ public class SimpleClassifier {
 
 			for (int i=0; i<dist.length; i++) {
 				String attValue = attribute.value(i);
-				if (dist[i]>MIN_PROBABILITY) { 
-					output += (output.equals("")) ? attValue : ","+attValue;
+				if (dist[i]>this.minimumProbability) { 
+					output += (output.equals("")) ? attValue : ","+attValue;		
 				}
 			}
 

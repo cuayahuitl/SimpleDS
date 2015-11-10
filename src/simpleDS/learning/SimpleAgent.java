@@ -7,17 +7,20 @@
 
 package simpleDS.learning;
 
-import simpleDS.networking.SimpleServer;
+import simpleDS.networking.SimpleWebServer;
 import simpleDS.networking.SimpleSocketHandler;
 import simpleDS.util.Logger;
 
 public class SimpleAgent extends Thread {
 	private SimpleSocketHandler handler = null;
-	private SimpleServer deepServer = null;
+	private SimpleWebServer deepServer = null;
 	private String lastDeepAction = null;
+	private String numInputOutputs = null;
 	public boolean connected = false;
 
-	public SimpleAgent() {
+	public SimpleAgent(String numInputOutputs) {
+		this.numInputOutputs = numInputOutputs;
+
 		try {
 			Thread thread = new Thread("SERVER");
 			thread.start();
@@ -47,6 +50,7 @@ public class SimpleAgent extends Thread {
 					if (action.startsWith("Hello Server")) {
 						connected = true;
 						action = null;
+						sendMessage(numInputOutputs);
 
 					} else if (action.startsWith("action")) {
 						String value = action.substring(action.indexOf("=")+1);
@@ -57,7 +61,7 @@ public class SimpleAgent extends Thread {
 					}
 				}
 			});
-			deepServer = new SimpleServer(handler);
+			deepServer = new SimpleWebServer(handler);
 			
 			
 			while (!connected) {

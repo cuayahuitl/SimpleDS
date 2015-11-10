@@ -1,4 +1,5 @@
-SimpleDS version 1.0 - 02.Nov.2015
+SimpleDS version 1.0 - 02.Nov.2015 - First draft
+                 1.1 - 10.Nov.2015 - Multilingual support
 
 DESCRIPTION
 -----------
@@ -19,8 +20,8 @@ and client-server processing, and fast learning via constrained search spaces.
 This system is for experimental purposes, represents work in progress, and is 
 therefore released without any guarantees.
 
-REQUIREMENTS
-------------
+SOFTWARE
+--------
 This system was implemented and tested under Linux with the following software --  
 though it should run in other operating systems with minor modifications.
 + Ubuntu 14.10.4
@@ -28,6 +29,7 @@ though it should run in other operating systems with minor modifications.
 + Ant 1.9.3 
 + Node 0.10.25
 + Octave 3.8.0
++ Android 4.4.3 (optional)
 
 COMPILATION
 -----------
@@ -74,12 +76,15 @@ The config file "YourPath/SimpleDialogueSystem/config.txt" has the following par
 
 Dialogues=Number of dialogues for training/test (positive integer)
 Verbose=Shows compressed information or detailed info (false or true)
+Language=Defines the (spoken) language to use (english, german, spanish)
 SysResponses=Path and file name of system responses (e.g. resources/SysResponses.txt)
 UsrResponses=Path and file name of system responses (e.g. resources/UsrResponses.txt)
 SlotValues=Slot-value pairs of the system (e.g. resources/SlotValues.txt)
 DemonstrationsPath=Path to the demonstration dialogues (e.g. data/)
 DemonstrationsFile=Pointer to training instances from demonstrations (models/demonstrations.arff)
+MinimumProbability=Minimum probability (>=0) for probable actions considered for action-selection
 SlotsToConfirm=Number of slots to confirm (positive integer, e.g. 3)
+OutputPath=The directory where the output files (policy and metrics) will be stored
 NoiseLevel=Scores under this level (<=0.2) would receive distorsion to model noisy recognition
 AddressPort=Address and port of the client socket (e.g. ws://localhost:8082/simpleds)
 SavingFrequency=This number defines the frequency for policiy/output saving (positive integer)
@@ -91,6 +96,8 @@ BurningSteps=This number defines the time steps with random action selection (po
 DiscountFactor=This number defines gamma parameter also known as discount factor (real number)
 MinimumEpsilon=This number defines the minimum epsilon during learning (real number)
 BatchSize=This number defines the batch size (positive integer, e.g. 32 or 64)
+AndroidSupport=This variable is used to test dialogues with a real speech recogniser (true or false)
+SocketServerPort=This number defines the socket port used for communication with Android (positive integer)
 
 You may want to set Verbose=false during training and Verbose=true during tests.
 You may also want to set a high number of dialogues during training and a low one during tests.

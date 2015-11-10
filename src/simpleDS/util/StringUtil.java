@@ -109,6 +109,25 @@ public class StringUtil {
 	
 		return template;
 	}
+	
+	public static void expandAbstractKeyValuePairs(HashMap<String,String> collection) {
+		try {
+		for (String key : collection.keySet()) {
+			String line = collection.get(key);
+			if (line.indexOf("%")>0) {
+				String prefix = line.substring(0, line.indexOf("%"));
+				String rest = line.substring(line.indexOf("%")+1);
+				String value = rest.substring(0, rest.indexOf("%"));
+				String suffix = rest.substring(rest.indexOf("%")+1);
+				String newValue = prefix + collection.get(value) + suffix;
+				collection.put(key, newValue);
+			}
+		}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static ArrayList<String> getArrayListFromString(String wordSequence, String separator) {
 		ArrayList<String> array = new ArrayList<String>();
@@ -119,5 +138,32 @@ public class StringUtil {
 		}
 
 		return array;
+	}
+	
+	public static HashMap<String,Double> getWordDistributionFromRawText(String observations) {
+		HashMap<String,Integer> counts = new HashMap<String,Integer>();
+		HashMap<String,Double> probs = new HashMap<String,Double>();
+		int topCount = 0;
+
+		if (observations == null || observations.equals("")) return probs;
+		
+		observations = observations.toLowerCase();
+		ArrayList<String> tokens = StringUtil.getArrayListFromString(observations, " :");
+		
+		for (String token : tokens) {
+			IOUtil.incrementHashTable(counts, token, 1);
+			int count = counts.get(token);
+			if (count>topCount) {
+				topCount = count;
+			}
+		}
+
+		for (String token : tokens) {
+			int count = counts.get(token);
+			double prob = (double) count/topCount;
+			probs.put(token, prob);
+		}
+		
+		return probs;
 	}
 }

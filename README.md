@@ -9,8 +9,8 @@ This system runs under a client-server architecture, where the learning agent (i
 
 This system is for experimental purposes, represents work in progress, and is therefore released without any guarantees.
 
-REQUIREMENTS
-------------
+SOFTWARE
+--------
 This system was implemented and tested under Linux with the following software -- though it should run in other operating systems with minor modifications.
 + Ubuntu 14.10.4
 + Java 1.8.0
@@ -20,13 +20,13 @@ This system was implemented and tested under Linux with the following software -
 
 COMPILATION
 -----------
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 
 >ant
 
 EXECUTION
 ---------
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 
 >scripts/run.sh train
 
@@ -44,34 +44,33 @@ or
 
 >[From the command line, press Ctrl+C for termination]
 
-Alternatively, you can run the system from two terminals:
+Alternatively (recommended), you can run the system from two terminals:
 
-Terminal1>ant SimpleDS
+Terminal1:YourPath/SimpleDS>ant SimpleDS
 
-Terminal2>node web/main/runclient.js [train|test]
+Terminal2:YourPath/SimpleDS/web/main>node runclient.js [train|test]
 
 PLOTTING
 --------
 You can visualise a learning curve of the SimpleDS agent according to number of learning steps in the x-axis and average reward + learning time in the y-axis.
 
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 
 >octave scripts/plotdata.m results/simpleds-output.txt
 
 >[From the command line, press the space bar key for termination]
 
-![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/results/simpleds-output.png "Example learning curve of a SimpleDS agent")
-
 or 
 
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 
 >octave scripts/plotdata.m results/simpleds-output.txt results/simpleds-output.png
 
 >[From the command line, press the space bar key for termination]
 
 The latter generates an image of the plot in png (Portable Network Graphics) format. 
-The file plotdata.m can also be used from Matlab if that software is prefered.
+The file plotdata.m can also be used from Matlab if that software is prefered. 
+See example learning curves at YourPath/results/*/*.png
 
 CONFIGURATION
 -------------

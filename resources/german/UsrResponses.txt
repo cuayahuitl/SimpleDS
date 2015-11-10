@@ -1,0 +1,34 @@
+AskFor(more):Confirm(more=$more)
+Request(hmihy):Provide(food=$food,price=$price,area=$area)|Provide(food=$food,price=$price)|Provide(price=$price,area=$area)
+Request(food):Provide(food=$food)
+Request(price):Provide(price=$price)
+Request(area):Provide(area=$area)
+Request(food,price):Provide(food=$food,price=$price)|Provide(food=$food)|Provide(price=$price)
+Request(food,area):Provide(food=$food,area=$area)|Provide(food=$food)|Provide(area=$area)
+Request(price,area):Provide(price=$price,area=$area)|Provide(price=$price)|Provide(area=$area)
+Request(food,price,area):Provide(food=$food,price=$price,area=$area)
+Apology(food):Provide(food=$food)
+Apology(price):Provide(price=$price)
+Apology(area):Provide(area=$area)
+Apology(food,price):Provide(food=$food,price=$price)|Provide(food=$food)|Provide(price=$price)
+Apology(food,area):Provide(food=$food,area=$area)|Provide(food=$food)|Provide(area=$area)
+Apology(price,area):Provide(price=$price,area=$area)|Provide(price=$price)|Provide(area=$area)
+Apology(food,price,area):Provide(food=$food,price=$price,area=$area)|Provide(food=$food,price=$price)|Provide(price=$price,area=$area)
+ExpConfirm(food=$food):Confirm($yesno)
+ExpConfirm(price=$price):Confirm($yesno)
+ExpConfirm(area=$area):Confirm($yesno)
+ExpConfirm(food=$food,price=$price):Confirm($yesno)
+ExpConfirm(food=$food,area=$area):Confirm($yesno)
+ExpConfirm(price=$price,area=$area):Confirm($yesno)
+ExpConfirm(food=$food,price=$price,area=$area):Confirm($yesno)
+
+Provide(food=$food):"Ich moechte gerne $food essen"|"Ich suche nach $food essen"|"Ich hätte gern $food essen"|"$food essen"|"$food"
+Provide(price=$price):"$price essen"|"Etwas $price"|"$price"
+Provide(area=$area):"In $area"|"In der Naehe von $area"|"im $area"|"$area"
+Provide(food=$food,price=$price):"Ich brauche $price $food essen"|"Ich haette gerne $price $food essen"|"$price $food essen"
+Provide(food=$food,area=$area):"Ich haette gerne $food essen im $area"|"Am liebsten moechte ich $food essen in $area"|"$food essen im $area"
+Provide(price=$price,area=$area):"Ich will $price essen im $area"|"Ich suche nach $price essen im $area"|"$price essen im $area"
+Provide(food=$food,price=$price,area=$area):"I suche nach $price $food essen in der $area Gegend"|"Wir haetten gerne $price $food essen im $area"|"$price $food essen in der $area Gegend"|"$price $food essen in der $area Gegend"|"$price $food essen im $area"
+Confirm(more=$more):"Nein"
+Confirm(yes):"Ja genau"|"Ja bitte"|"Das stimmt"
+Confirm(no):"Nein habe ich nicht"|"Nein danke"|"Noe"

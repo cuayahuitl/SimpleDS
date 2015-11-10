@@ -1,0 +1,20 @@
+SYS:[Salutation(greeting)]"Hola!"
+USR:null
+SYS:[Request(food,price)]"Que tipo de comida y rango de precio?"
+USR:""Quiero comida japonesa de precio costoso"
+SYS:[ExpConfirm(food=$food)]"Dijiste comida japonesa?"
+USR:"Asi es"
+SYS:[ExpConfirm(price=$price)]"Dijiste de precio costoso?"
+USR:"Si"
+SYS:[Request(area)]"Que area de la ciudad te gustaría?"
+USR:"En el centro"
+SYS:[ExpConfirm(area=$area)]"Dijiste en el centro?"
+USR:"Si por favor"
+SYS:[Retrieve(info)]"Dejame ver."
+USR:null
+SYS:[Provide(known)]"El restaurante X es una excelente opción. Esta localizado en Y."
+USR:null
+SYS:[AskFor(more)]"Algo más?"
+USR:"No gracias"
+SYS:[Salutation(closing)]"Muy bien. Hasta la próxima!"
+USR:null

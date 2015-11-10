@@ -1,0 +1,14 @@
+SYS:[Salutation(greeting)]"Hallo!"
+USR:null
+SYS:[Request(hmihy)]"Wie kann ich ihnen helfen?"
+USR:"I suche nach indisches essen mit akzeptablem preis in der osten Gegend"
+SYS:[ExpConfirm(food=$food,price=$price)]"Haben Sie gesagt, sie möchten indisches essen mit akzeptablem preis?"
+USR:"Ja genau"
+SYS:[Retrieve(info)]"Lassen sie mich einmal nachsehen."
+USR:null
+SYS:[Provide(known)]"Restaurant X ist eine ausgezeichnete Wahl. Es ist in Y."
+USR:null
+SYS:[AskFor(more)]"Sonst noch etwas?"
+USR:"Nein danke"
+SYS:[Salutation(closing)]"Okay, auf Wiedersehen. Tschüss!"
+USR:null

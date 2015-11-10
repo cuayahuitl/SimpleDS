@@ -1,0 +1,4 @@
+$food:"italienisches|indisches|mexikanisches|chinesisches|japanisches"
+$price:"billig|mit akzeptablem preis|teuer"
+$area:"norden|sueden|osten|westen|zentrum"
+$more:"nein"

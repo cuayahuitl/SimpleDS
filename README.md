@@ -3,7 +3,7 @@ A Simple Deep Reinforcement Learning Dialogue System
 
 DESCRIPTION
 -----------
-SimpleDS is a simple dialogue system trained with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actionsdirectly from raw (noisy) text of the last system and user responses. The motivation is to train dialogue agents with as little human intervention as possible. 
+SimpleDS is a simple dialogue system trained with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from raw (noisy) text of the last system and user responses (in (English, German and Spanish). The motivation is to train dialogue agents with as little human intervention as possible.
 
 This system runs under a client-server architecture, where the learning agent (in JavaScript) acts as the "server" and the environment (in Java) acts as the "client". They communicate by exchanging messages, where the server tells the client the action to execute, and the client tells the server the state and reward observed. SimpleDS is based on [ConvNetJS](http://cs.stanford.edu/people/karpathy/convnetjs/), which implements the algorithm [`Deep Q-Learning with experience replay' (Mnih, et al. 2013)](http://arxiv.org/pdf/1312.5602v1.pdf). SimpleDS is a dialogue system on top of ConvNetJS with support for multi-threaded and client-server processing, and fast learning via constrained search spaces.
 
@@ -80,6 +80,8 @@ Dialogues=Number of dialogues for training/test (positive integer)
 
 Verbose=Shows compressed information or detailed info (false or true)
 
+Language=Defines the (spoken) language to use (english, german, spanish)
+
 SysResponses=Path and file name of system responses (e.g. resources/SysResponses.txt)
 
 UsrResponses=Path and file name of system responses (e.g. resources/UsrResponses.txt)
@@ -115,6 +117,8 @@ MinimumEpsilon=This number defines the minimum epsilon during learning (real num
 BatchSize=This number defines the batch size (positive integer, e.g. 32 or 64)
 
 You may want to set Verbose=false during training and Verbose=true during tests. You may also want to set a high number of dialogues during training (e.g. Dialogues=2000) and a low one during tests (e.g. Dialogues=1). You may want to change the system/user responses if you want different verbalisations. If this is the case, then you will also want to update the demonstration dialogues in the folder YourPath/SimpleDS/data/.
+
+Forthcoming: Instructions on how to apply SimpleDS to different interactive systems.
 
 COMMENTS/QUESTIONS?
 -------------------

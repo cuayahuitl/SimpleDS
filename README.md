@@ -3,11 +3,11 @@ A Simple Deep Reinforcement Learning Dialogue System
 
 DESCRIPTION
 -----------
-SimpleDS is a simple dialogue system trained with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from raw (noisy) text of the last system and user responses (in English, German or Spanish). The motivation is to train dialogue agents with as little human intervention as possible.
+SimpleDS is a simple dialogue system trained with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from raw (noisy) text of the last system and user responses. The motivation is to train dialogue agents with as little human intervention as possible.
 
 This system runs under a client-server architecture, where the learning agent (in JavaScript) acts as the "server" and the environment (in Java) acts as the "client". They communicate by exchanging messages, where the server tells the client the action to execute, and the client tells the server the actions available, environment state and reward observed. SimpleDS is based on [ConvNetJS](http://cs.stanford.edu/people/karpathy/convnetjs/), which implements the algorithm [`Deep Q-Learning with experience replay' (Mnih, et al. 2013)](http://arxiv.org/pdf/1312.5602v1.pdf). SimpleDS is a dialogue system on top of ConvNetJS with support for multi-threaded and client-server processing, and fast learning via constrained search spaces.
 
-This system is for experimental purposes, represents work in progress, and is therefore released without any guarantees.
+This system has been tested with simulated and real dialogues using the Google Speech Recogniser. It has also been tested in three different languages: English, German and Spanish. SimpleDS is for experimental purposes, represents work in progress, and is therefore released without any guarantees.
 
 SOFTWARE
 --------
@@ -17,6 +17,17 @@ This system was implemented and tested under Linux with the following software -
 + Ant 1.9.3 
 + Node 0.10.25
 + Octave 3.8.0
++ Android 4.4.3 (optional)
+
+DOWNLOAD
+--------
+You can download the system directly from the command line:
+
+>git clone https://github.com/cuayahuitl/SimpleDS.git
+
+You can also download the system as a zip file using the following URL, 
+and then unzip it in your path of preference. 
+https://github.com/cuayahuitl/SimpleDS/archive/master.zip 
 
 COMPILATION
 -----------
@@ -36,7 +47,7 @@ EXECUTION
 
 or 
 
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 
 >scripts/run.sh test
 
@@ -92,7 +103,11 @@ DemonstrationsPath=Path to the demonstration dialogues (e.g. data/)
 
 DemonstrationsFile=Pointer to training instances from demonstrations (models/demonstrations.arff)
 
+MinimumProbability=Minimum probability (>=0) for probable actions considered for action-selection
+
 SlotsToConfirm=Number of slots to confirm (positive integer, e.g. 3)
+
+OutputPath=The directory where the output files (policy and metrics) will be stored
 
 NoiseLevel=Scores under this level (<=0.2) would receive distorsion to model noisy recognition
 
@@ -116,11 +131,18 @@ MinimumEpsilon=This number defines the minimum epsilon during learning (real num
 
 BatchSize=This number defines the batch size (positive integer, e.g. 32 or 64)
 
+AndroidSupport=This variable is used to test dialogues with a real speech recogniser (true or false)
+
+SocketServerPort=This number defines the socket port used for communication with Android (positive integer)
+
 You may want to set Verbose=false during training and Verbose=true during tests. You may also want to set a high number of dialogues during training (e.g. Dialogues=2000) and a low one during tests (e.g. Dialogues=1). You may want to change the system/user responses if you want different verbalisations. If this is the case, then you will also want to update the demonstration dialogues in the folder YourPath/SimpleDS/data/.
 
-Forthcoming: Instructions on how to apply SimpleDS to different interactive systems.
+Forthcoming extensions: 
++ Instructions on how to apply SimpleDS to different types of interactive systems.
++ Tools for testing and visualising the learnt policies.
++ Other learning algorithms, among others.
 
-COMMENTS/QUESTIONS?
+COMMENTS/QUESTIONS/COLLABORATIONS?
 -------------------
 Contact: [Heriberto Cuayahuitl](http://www.macs.hw.ac.uk/~hc213)
 

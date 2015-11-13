@@ -79,8 +79,8 @@ or
 
 >[From the command line, press the space bar key for termination]
 
-The latter generates an image of the plot in png (Portable Network Graphics) format. 
-The file plotdata.m can also be used from Matlab if that software is prefered. 
+The latter generates an image of the plot in png (Portable Network Graphics) format. The file plotdata.m can also be used from Matlab if that software is prefered. The following learning curves can be obtained with the default parameters for the supported languages: [English](https://github.com/cuayahuitl/SimpleDS/blob/master/results/english/simpleds-output.png), [German](https://github.com/cuayahuitl/SimpleDS/blob/master/results/german/simpleds-output.png) and [Spanish](https://github.com/cuayahuitl/SimpleDS/blob/master/results/spanish/simpleds-output.png).
+
 See example learning curves at YourPath/results/*/*.png
 
 CONFIGURATION

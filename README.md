@@ -11,12 +11,12 @@ This system has been tested with simulated and real dialogues using the Google S
 
 SOFTWARE
 --------
-This system was implemented and tested under Linux with the following software -- though it should run in other operating systems with minor modifications.
-+ Ubuntu 14.10.4
-+ Java 1.8.0
-+ Ant 1.9.3 
-+ Node 0.10.25
-+ Octave 3.8.0
+This system was implemented and tested under Linux and Mac OS X with the following software -- though it should run in other operating systems with minor modifications.
++ Ubuntu 14.10.4 / Mac OS X 10.10
++ Java 1.8.0 or higher
++ Ant 1.9.3 or higher
++ Node 0.10.25 or higher
++ Octave 3.8.0 or higher
 + Android 4.4.3 (optional)
 
 DOWNLOAD
@@ -63,11 +63,11 @@ Terminal2:YourPath/SimpleDS/web/main>node runclient.js [train|test]
 
 PLOTTING
 --------
-You can visualise a learning curve of the SimpleDS agent according to number of learning steps in the x-axis and average reward + learning time in the y-axis.
+You can visualise a learning curve of the SimpleDS agent according to number of learning steps in the x-axis and average reward + learning time in the y-axis. Learning curves can be generated for newly trained or pre-trained policies in the currently supported languages (English, German and Spanish).
 
 >cd YourPath/SimpleDS
 
->octave scripts/plotdata.m results/simpleds-output.txt
+>octave scripts/plotdata.m results/english/simpleds-output.txt
 
 >[From the command line, press the space bar key for termination]
 
@@ -75,7 +75,7 @@ or
 
 >cd YourPath/SimpleDS
 
->octave scripts/plotdata.m results/simpleds-output.txt results/simpleds-output.png
+>octave scripts/plotdata.m results/english/simpleds-output.txt results/english/simpleds-output.png
 
 >[From the command line, press the space bar key for termination]
 

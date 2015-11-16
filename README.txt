@@ -1,4 +1,4 @@
-SimpleDS version 1.0 - 02.Nov.2015 - First draft
+SimpleDS version 1.0 - 02.Nov.2015 - First version
                  1.1 - 10.Nov.2015 - Multilingual support
 
 DESCRIPTION
@@ -17,40 +17,54 @@ implements the algorithm `Deep Q-Learning with experience replay' (Mnih, et al. 
 SimpleDS is a dialogue system on top of ConvNetJS with support for multi-threaded 
 and client-server processing, and fast learning via constrained search spaces.
 
-This system is for experimental purposes, represents work in progress, and is 
+This system has been tested with simulated and real dialogues using the Google Speech
+Recogniser. It has also been tested in three different languages: English, German and 
+Spanish. SimpleDS is for experimental purposes, represents work in progress, and is 
 therefore released without any guarantees.
 
 SOFTWARE
 --------
-This system was implemented and tested under Linux with the following software --  
-though it should run in other operating systems with minor modifications.
-+ Ubuntu 14.10.4
-+ Java 1.8.0
-+ Ant 1.9.3 
-+ Node 0.10.25
-+ Octave 3.8.0
+This system was implemented and tested under Linux and Mac OS X with the following 
+software -- though it should run in other operating systems with minor modifications.
++ Ubuntu 14.10.4 / Mac OS X 10.10
++ Java 1.8.0 or higher
++ Ant 1.9.3 or higher
++ Node 0.10.25 or higher
++ Octave 3.8.0 or higher
 + Android 4.4.3 (optional)
+
+DOWNLOAD
+--------
+You can download the system directly from the command line:
+>git clone https://github.com/cuayahuitl/SimpleDS.git
+
+You can also download the system as a zip file using the following URL, 
+and then unzip it in your path of preference.
+https://github.com/cuayahuitl/SimpleDS/archive/master.zip 
 
 COMPILATION
 -----------
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 >ant
 
 EXECUTION
 ---------
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 >scripts/run.sh train
 >[From the command line, press Ctrl+C for termination]
 
 or 
 
->cd YourPath/SimpleDialogueSystem
+>cd YourPath/SimpleDS
 >scripts/run.sh test
 >[From the command line, press Ctrl+C for termination]
 
 Alternatively, you can run the system from two terminals
-Terminal1>ant SimpleDS
-Terminal2>node web/main/runclient.js [train|test]
+Terminal1:YourPath/SimpleDS>ant SimpleDS
+Terminal2:YourPath/SimpleDS/web/main>node runclient.js (train|test) [num_dialogues] [-v|-nv]
+
+For practical reasons, you can specify the number of dialogues and verbose mode from the command 
+line. The values of these parameters would override the values specified in the file config.txt.
 
 PLOTTING
 --------
@@ -104,7 +118,12 @@ You may also want to set a high number of dialogues during training and a low on
 You may want to change the system/user responses if you want different verbalisations. If this
 is the case, then you will also want to update the demonstration dialogues in the folder data/.
 
-COMMENTS/QUESTIONS?
--------------------
+Forthcoming extensions:
++ Instructions on how to apply SimpleDS to different types of interactive systems.
++ Tools for testing and visualising the learnt policies.
++ Other learning algorithms, among others.
+
+COMMENTS/QUESTIONS/COLLABORATIONS?
+----------------------------------
 Contact: Heriberto Cuayahuitl
 Email: h.cuayahuitl@gmail.com

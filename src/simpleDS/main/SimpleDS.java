@@ -70,12 +70,19 @@ public class SimpleDS {
 			}
 		}
 		System.exit(0);
-
 	}
 
 	private void interactionManagement() {
 		HashMap<String,String> dict = new HashMap<String,String>();
-		int numDialogues = Integer.parseInt(configurations.get("Dialogues"));
+		System.out.println("simpleAgent.verbose="+simpleAgent.verbose);
+		System.out.println("simpleAgent.dialogues="+simpleAgent.dialogues);
+		verbose = simpleAgent.verbose != null && simpleAgent.verbose.equals("-v")? true : verbose;
+		verbose = simpleAgent.verbose != null && simpleAgent.verbose.equals("-nv")? false : verbose;
+		String dialogues = simpleAgent.dialogues != null ? simpleAgent.dialogues : configurations.get("Dialogues");
+		int numDialogues = Integer.parseInt(dialogues);		
+		System.out.println("verbose="+verbose);
+		System.out.println("_numDialogues="+dialogues);
+		System.out.println("numDialogues="+numDialogues);
 		long numTimeSteps = 0;
 
 		for (int i=1; i<=numDialogues; i++) {

@@ -7,15 +7,21 @@
 
 package simpleDS.learning;
 
+import java.util.ArrayList;
+
 import simpleDS.networking.SimpleWebServer;
 import simpleDS.networking.SimpleSocketHandler;
 import simpleDS.util.Logger;
+import simpleDS.util.StringUtil;
 
 public class SimpleAgent extends Thread {
 	private SimpleSocketHandler handler = null;
 	private SimpleWebServer deepServer = null;
 	private String lastDeepAction = null;
 	private String numInputOutputs = null;
+	public String executionMode = null;
+	public String dialogues = null;
+	public String verbose = null;
 	public boolean connected = false;
 
 	public SimpleAgent(String numInputOutputs) {
@@ -51,7 +57,15 @@ public class SimpleAgent extends Thread {
 						connected = true;
 						action = null;
 						sendMessage(numInputOutputs);
-
+						
+					} else if (action.startsWith("params")) {
+						ArrayList<String> list = StringUtil.getArrayListFromString(action, "=,");						
+						for (int i=0; i<list.size(); i++) {
+							if (i==3) executionMode = list.get(3);
+							else if (i==4) dialogues = list.get(4);
+							else if (i==5) verbose = list.get(5);
+						}
+						
 					} else if (action.startsWith("action")) {
 						String value = action.substring(action.indexOf("=")+1);
 						setLastAction(value);

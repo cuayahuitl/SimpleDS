@@ -137,6 +137,7 @@ public class ConfigParser {
 		} else {
 			verbose = configurations.get("Verbose").equals("true") ? true : false;
 		}
+		Logger.error(this.getClass().getName(), "setVerboseMode", "verbose="+verbose);
 	}
 	
 	public void setNumDialogues(String _numDialogues) {
@@ -145,5 +146,6 @@ public class ConfigParser {
 		} else {
 			numDialogues = Integer.parseInt(configurations.get("Dialogues"));
 		}	
+		Logger.error(this.getClass().getName(), "setNumDialogues", "numDialogues="+numDialogues);
 	}
 }

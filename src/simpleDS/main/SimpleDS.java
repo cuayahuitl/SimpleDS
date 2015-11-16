@@ -16,39 +16,29 @@ import java.util.HashMap;
 import simpleDS.learning.SimpleAgent;
 import simpleDS.learning.SimpleEnvironment;
 import simpleDS.networking.SimpleSocketServer;
-import simpleDS.util.IOUtil;
+import simpleDS.util.ConfigParser;
 import simpleDS.util.Logger;
-import simpleDS.util.StringUtil;
 
 public class SimpleDS {
-	private HashMap<String,String> configurations;
+	private ConfigParser configParser;
 	private SimpleEnvironment environment;
 	private SimpleAgent simpleAgent;
 	private SimpleSocketServer socketServer;
-	private boolean verbose = false;
 
 	public SimpleDS(String configFile) {
-		parseConfigFile(configFile);
+		configParser = new ConfigParser(configFile);
 		initialiseEnvironment();
 	}
 	
 	private void initialiseEnvironment() {
-		environment = new SimpleEnvironment(configurations);
+		environment = new SimpleEnvironment(configParser.getParams());
 		initialiseSocketServer();
 		initialiseWebServer();
 	}
 
-	private void parseConfigFile(String configFile) {
-		configurations = new HashMap<String,String>();
-		IOUtil.readHashMap(configFile, configurations, "=");
-		StringUtil.expandAbstractKeyValuePairs(configurations);
-		IOUtil.printHashMap(configurations, "CONFIGURATIONS");
-		verbose = configurations.get("Verbose").equals("true") ? true : false;
-	}
-
 	private void initialiseSocketServer() {
-		if (configurations.get("AndroidSupport").equals("true")) {
-			String port = configurations.get("SocketServerPort");
+		if (configParser.getParamValue("AndroidSupport").equals("true")) {
+			String port = configParser.getParamValue("SocketServerPort");
 			socketServer = new SimpleSocketServer(port);
 			socketServer.createServer();
 		}
@@ -62,7 +52,7 @@ public class SimpleDS {
 			try{
 				System.out.println("Waiting for SimpleAgent to complete...");
 				simpleAgent.wait();
-
+				
 				interactionManagement();
 
 			} catch(InterruptedException e) {
@@ -74,25 +64,18 @@ public class SimpleDS {
 
 	private void interactionManagement() {
 		HashMap<String,String> dict = new HashMap<String,String>();
-		System.out.println("simpleAgent.verbose="+simpleAgent.verbose);
-		System.out.println("simpleAgent.dialogues="+simpleAgent.dialogues);
-		verbose = simpleAgent.verbose != null && simpleAgent.verbose.equals("-v")? true : verbose;
-		verbose = simpleAgent.verbose != null && simpleAgent.verbose.equals("-nv")? false : verbose;
-		String dialogues = simpleAgent.dialogues != null ? simpleAgent.dialogues : configurations.get("Dialogues");
-		int numDialogues = Integer.parseInt(dialogues);		
-		System.out.println("verbose="+verbose);
-		System.out.println("_numDialogues="+dialogues);
-		System.out.println("numDialogues="+numDialogues);
+		configParser.setVerboseMode(simpleAgent.verbose);
+		configParser.setNumDialogues(simpleAgent.dialogues);
 		long numTimeSteps = 0;
 
-		for (int i=1; i<=numDialogues; i++) {
+		for (int i=1; i<=configParser.numDialogues; i++) {
 			environment.interactionPolicy.resetUserInfo(environment.userSimulator);
 			int steps = 1;
 			while(true) {		
 				dict.put("action_sys_key", getSystemAction_Key(steps, i, false));
 				dict.put("action_sys_val", getSystemAction_Val(dict.get("action_sys_key")));
 				dict.put("response_sys", getSystemResponse(dict.get("action_sys_key")));
-				if (verbose) {
+				if (configParser.verbose) {
 					String sys = "["+dict.get("action_sys_key")+"] ["+dict.get("action_sys_val")+"] " +dict.get("response_sys");
 					Logger.debug("SympleDS", "IM", steps+" SYS:"+sys);
 				}
@@ -101,7 +84,7 @@ public class SimpleDS {
 				dict.put("response_usr", getUserResponse(dict.get("action_usr_key")));
 				dict.put("response_asr", getSpeechRecOutput(dict.get("response_usr")));
 				dict.put("action_usr_val", getUserAction_Val(dict.get("action_usr_key")));
-				if (dict.get("response_usr") != null && verbose) {
+				if (dict.get("response_usr") != null && configParser.verbose) {
 					String usr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_usr");
 					String asr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_asr");
 					Logger.debug("SympleDS", "IM", steps+" USR:"+usr);
@@ -111,7 +94,7 @@ public class SimpleDS {
 				environment.interactionPolicy.updateLastInfo(dict, environment.userSimulator);
 				if (endOfInteractionReached()) {
 					getSystemAction_Key(steps, i, true);
-					if (verbose) System.out.print("\n\n");
+					if (configParser.verbose) System.out.print("\n\n");
 					break;
 				}
 				steps++;
@@ -151,7 +134,7 @@ public class SimpleDS {
 			}
 			simpleAgent.setLastAction(null);
 			String action = environment.interactionPolicy.simpleActions.getAction(learnedAction);
-			if (verbose) {
+			if (configParser.verbose) {
 				String reward = environment.interactionPolicy.getReward(rewards, learnedAction);
 				Logger.debug(this.getClass().getName(), "", "s="+stateWithNoise + " A="+actions + " a="+action + " r="+reward);
 			}

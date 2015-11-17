@@ -66,6 +66,14 @@ Terminal2:YourPath/SimpleDS/web/main>node runclient.js (train|test) [num_dialogu
 For practical reasons, you can specify the number of dialogues and verbose mode from the command 
 line. The values of these parameters would override the values specified in the file config.txt.
 
+The outputs from the training phase consists in the learnt interaction policy (json file under the 
+folder 'results/language'), and logged performance metrics (txt file under the 'results/language'). 
+Depending on the config file, the metrics produce multiple rows with the following information: 
+number of dialogues, average reward, epsilon value, number of actions per state, number of 
+dialogues, and execution time (in hours). The outputs from the test phase are similar exept that 
+no learnt policy is generated. In addition, executing the system in verbose mode would print out 
+training/test dialogues -- according to the specified parameters.
+
 PLOTTING
 --------
 You can visualise a learning curve of the SimpleDS agent according to number of 

@@ -1,5 +1,5 @@
-Dialogues=3000
-Verbose=false
+Dialogues=1
+Verbose=true
 Language=english
 SysResponses=resources/%Language%/SysResponses.txt
 UsrResponses=resources/%Language%/UsrResponses.txt

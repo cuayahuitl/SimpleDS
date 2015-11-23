@@ -234,11 +234,12 @@ function load_policy(filename) {
 
 function run() {
 	if (process.argv.length < 3) {
-		console.log('Usage: node ' + process.argv[1] + ' [train|test]');
+		console.log('Usage: node ' + process.argv[1] + ' (train|test) [num_dialogues] [-v|-nv]');
 		process.exit(1);
 	}
 
 	var execmode = process.argv[2];
+	ws.send("params="+process.argv);
 
 	if (execmode == "train") {
 		world.agents[0].brain.learning = true;

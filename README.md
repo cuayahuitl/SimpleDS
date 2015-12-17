@@ -139,11 +139,6 @@ SocketServerPort=This number defines the socket port used for communication with
 
 You may want to set Verbose=false during training and Verbose=true during tests. You may also want to set a high number of dialogues during training (e.g. Dialogues=2000) and a low one during tests (e.g. Dialogues=1). You may want to change the system/user responses if you want different verbalisations. If this is the case, then you will also want to update the demonstration dialogues in the folder YourPath/SimpleDS/data/.
 
-Forthcoming extensions: 
-+ Instructions on how to apply SimpleDS to different types of interactive systems.
-+ Tools for testing and visualising the learnt policies.
-+ Other learning algorithms, among others.
-
 CITATION
 --------
 Please use the following reference if you use SimpleDS code or if you want to cite this work.
@@ -162,7 +157,7 @@ Please use the following reference if you use SimpleDS code or if you want to ci
   
 }
 
-SimpleDS has been applied to [Strategic Dialogue Management](http://arxiv.org/abs/1511.08099), and can be applied to other interactive systems in a fairly straightforward way. See "How to apply SimpleDS to interactive systems".
+SimpleDS has been applied to [Strategic Dialogue Management](http://arxiv.org/abs/1511.08099), and can be applied to other interactive systems in a fairly straightforward way. See ["How to apply SimpleDS to interactive systems"](https://github.com/cuayahuitl/SimpleDS/blob/master/doc/How2UseSimpleDS.txt).
 
 COMMENTS/QUESTIONS/COLLABORATIONS?
 -------------------

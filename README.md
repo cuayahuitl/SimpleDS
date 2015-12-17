@@ -149,11 +149,17 @@ CITATION
 Please use the following reference if you use SimpleDS code or if you want to cite this work.
 
 @inproceedings{HC2016iwsds,
+
   author    = {Heriberto Cuay\'ahuitl},
+  
   title     = {{SimpleDS}: A Simple Deep Reinforcement Learning Dialogue System},
+  
   booktitle = {International Workshop on Spoken Dialogue Systems (IWSDS)},
+  
   url       = {https://github.com/cuayahuitl/SimpleDS/blob/master/doc/hc-iwsds2016.pdf},
+  
   year      = {2016},
+  
 }
 
 SimpleDS has been applied to [Strategic Dialogue Management](http://arxiv.org/abs/1511.08099), and can be applied to other interactive systems in a fairly straightforward way. See "How to apply SimpleDS to interactive systems".

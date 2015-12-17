@@ -1,0 +1,42 @@
+---------------------------------------------
+How to apply SimpleDS to interactive systems?
+---------------------------------------------
+
+SimpleDS can be applied to interactive system with/without verbal interaction.
+It has been applied in an intact way to strategic dialogue management, which 
+confirms its potential in terms of applicability across domains. This system 
+runs using a client-server architecture, where the 'server' is your system 
+and the 'client' is the Deep Reinforcement Learner. The following steps aim 
+to help you in integrating SimpleDS with your interactive system.
+
+(1) Instantiate the class "simpleDS/learning/SimpleAgent", which is parame-
+    terised by a string containing the number of state features and the 
+    number of actions (separated by a comma). This step will treat your 
+    system as a server. See example in simpleDS.main.SimpleDS.java
+
+(2) Create your own learning environment including states (vector of real 
+    numbers), actions (vector of N integers) and rewards (vector of N integers 
+    or single real number) and communicate them to the client via the method 
+    simpleAgent.sendMessage(). See example in SimpleDS.getSystemAction_key(),
+    which will return the action choosen by the learning agent.
+
+(3) Copy the file 'config.txt' and the folder 'web' (and all its contents) 
+    to a directory accessible by your system -- both at the same level. For
+    example, at the same level of your source directory. 
+
+(4) Edit the file 'config.txt' and change the parameters of your interest. 
+    For example: learning steps, experience size, batch size. The results
+    after training are stored in the folder results/english/*.* 
+    (N.B. Please make your that such folders exist in your computer)
+
+(5) Edit the file web/main/runClient.js, where you can modify the agent's 
+    configurations, e.g. network nodes and layers.
+
+(6) Run the server and client as described in the file README.txt
+
+N.B. If your system does not use verbal interaction (e.g. word-based features), 
+you can ignore the language related parameters in the file 'config.txt'. They
+roughly correspond to the first 11 parameters in the config file. 
+
+If you have questions or comments please send email to h.cuayahuitl@gmail.com
+

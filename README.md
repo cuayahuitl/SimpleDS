@@ -151,7 +151,7 @@ Please use the following reference if you use SimpleDS code or if you want to ci
   
   booktitle = {International Workshop on Spoken Dialogue Systems (IWSDS)},
   
-  url       = {https://github.com/cuayahuitl/SimpleDS/blob/master/doc/hc-iwsds2016.pdf},
+  url       = {http://arxiv.org/abs/1601.04574},
   
   year      = {2016},
   

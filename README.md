@@ -59,7 +59,7 @@ Alternatively (recommended), you can run the system from two terminals:
 
 Terminal1:YourPath/SimpleDS>ant SimpleDS
 
-Terminal2:YourPath/SimpleDS/web/main>node runclient.js (train|test) [num_dialogues] [-v|-nv]
+Terminal2:YourPath/SimpleDS/web/main>nodejs runclient.js (train|test) [num_dialogues] [-v|-nv]
 
 For practical reasons, you can specify the number of dialogues and verbose mode from the command line. The values of these parameters would override the values specified in the file config.txt.
 

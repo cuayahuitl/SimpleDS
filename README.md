@@ -161,6 +161,6 @@ SimpleDS has been applied to [Strategic Dialogue Management](http://arxiv.org/ab
 
 COMMENTS/QUESTIONS/COLLABORATIONS?
 -------------------
-Contact: [Heriberto Cuayahuitl](http://www.macs.hw.ac.uk/~hc213)
+Contact: [Heriberto Cuayahuitl](http://staff.lincoln.ac.uk/hcuayahuitl)
 
 Email: h.cuayahuitl@gmail.com

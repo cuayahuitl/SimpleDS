@@ -171,11 +171,11 @@ public class SimpleInteractionPolicy {
 		setHistoricInfo(dict.get("action_usr_key"));
 		setSlots(dict.get("action_usr_val"));
 		
-		if (verbose) {
+		/*if (verbose) {
 			Logger.debug(this.getClass().getName(), "updateLastInfo", "slotsRequested="+slotsRequested);
 			Logger.debug(this.getClass().getName(), "updateLastInfo", "slotsConfirmed="+slotsConfirmed);
 			System.out.println();
-		}
+		}*/
 	}
 
 	public String getLastInfoParam(String param) {

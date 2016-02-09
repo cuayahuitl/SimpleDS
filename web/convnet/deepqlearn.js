@@ -154,10 +154,12 @@ var deepqlearn = deepqlearn || { REVISION: 'ALPHA' };
       var indx_action_0 = this.allowed_actions_array[0];
       var maxkey = parseInt(indx_action_0); 
       var maxval = action_values.w[maxkey];
+      //console.log("!!!policy: maxkey="+maxkey + " maxval="+maxval);
       for(var k=1;k<this.allowed_actions_array.length;k++) {
         var indx_action_n = this.allowed_actions_array[k];
         var key_action_n = parseInt(indx_action_n);
         var val_action_n = action_values.w[key_action_n];
+        //console.log("!!!policy: key_action_n="+key_action_n + " val_action_n="+val_action_n);
 
         if(val_action_n>maxval) {
           maxkey = parseInt(indx_action_n); 

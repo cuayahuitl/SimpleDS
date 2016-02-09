@@ -75,6 +75,7 @@ public class SimpleInteractionPolicy {
 			HashMap<String,Float> lastConfScores = getLastConfidenceScores();
 			String pairs = lastUsrAction.substring(lastUsrAction.indexOf("(")+1, lastUsrAction.indexOf(")"));
 			for (String pair : StringUtil.getArrayListFromString(pairs, ",")) {
+				if (pair.indexOf("=") == -1) continue;
 				String key = pair.substring(0, pair.indexOf("="));
 				String val = pair.substring(pair.indexOf("=")+1);
 				double confidence = getSpeechRecConfidence(val, lastConfScores);

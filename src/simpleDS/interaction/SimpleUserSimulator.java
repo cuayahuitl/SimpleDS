@@ -50,9 +50,9 @@ public class SimpleUserSimulator {
 			usrGoal.put(slot, randomValue);
 		}
 		
-		if (verbose) {
+		/*if (verbose) {
 			Logger.debug("SimpleUserSimulator", "resetUserGoal", "usrGoal="+usrGoal);
-		}
+		}*/
 	}
 
 	public String getAction(String action_sys_key, String action_sys_val) {

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #################################################################################### 
 # This script runs the SimpleDS system for training dialogue agents 
@@ -7,23 +7,27 @@
 
 stty cols 120
 
-if [ $1 = "train" ] ; then
+# Parent/Root directory relative to this script.
+# Allows this to be called from any working directoy and still function.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/..
+pushd $DIR > /dev/null
+
+if [ "$1" = "train" ] ; then
    xterm -geometry 120x50 -T "SimpleDS.Server" -hold -e "ant SimpleDS" &
    sleep 2
-   cd web/main
+   pushd $DIR/web/main/ > /dev/null
    xterm -geometry 80x20 -T "SimpleDS.Client" -hold -e "node runclient.js train"
-   #node runclient.js train
-   cd ../../
+   popd > /dev/null
 
-elif [ $1 = "test" ] ; then 
+elif [ "$1" = "test" ] ; then 
    xterm -geometry 120x50 -T "SimpleDS.Client" -hold -e "ant SimpleDS" &
    sleep 2
-   cd web/main
+   pushd $DIR/web/main/ > /dev/null
    xterm -geometry 80x20 -T "SimpleDS.Client" -hold -e "node runclient.js test"
-   #node runclient.js test
-   cd ../../
+   popd > /dev/null
 
 else 
    echo "usage: run.sh (train | test)" 
-fi 
+fi
 
+popd

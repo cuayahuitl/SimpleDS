@@ -166,4 +166,10 @@ public class StringUtil {
 		
 		return probs;
 	}
+	
+	@SuppressWarnings("resource")
+	public static String getTypedInput() {
+		Scanner scanner = new Scanner(System.in);
+		return scanner.nextLine();
+	}
 }

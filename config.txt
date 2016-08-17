@@ -21,5 +21,6 @@ DiscountFactor=0.7
 MinimumEpsilon=0.001
 BatchSize=32
 
+TypedInputSupport=true
 AndroidSupport=false
 SocketServerPort=2015

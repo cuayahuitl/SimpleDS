@@ -148,4 +148,32 @@ public class IOUtil {
 		}
 	}
 
+	public static void printSysTurn(HashMap<String,String> dict, int steps, boolean verbose) {
+		if (dict.get("response_sys") != null && verbose) {
+			String sys = "["+dict.get("action_sys_key")+"] ["+dict.get("action_sys_val")+"] " +dict.get("response_sys");
+			Logger.debug("SympleDS", "IM", steps+" SYS:"+"\u001B[33m"+sys+"\u001B[0m");
+		}
+	}
+
+	public static void printUsrTurn(HashMap<String,String> dict, int steps, boolean verbose) {
+		if (dict.get("response_usr") != null && verbose) {
+			String usr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_usr");
+			String asr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_asr");
+			Logger.debug("SympleDS", "IM", steps+" USR:"+"\u001B[33m"+usr+"\u001B[0m");
+			Logger.debug("SympleDS", "UM", steps+" USR:"+asr);
+		}
+	}
+
+	public static void printLearningExperience(String state, String actions, String action, String reward, boolean verbose) {
+		if (verbose) {
+			Logger.debug("SympleDS", "", "s="+state + " A="+actions + " a="+action + " r="+reward);
+		}
+	}
+
+	public static void printInteractionLength(int numDialogues, long numTimeSteps, double winRate) {
+		if (numDialogues%100 == 0) {
+			double avgTimeSteps = (double) numTimeSteps/numDialogues;
+			Logger.debug("SympleDS", "InteractionManagement", "dialogues="+numDialogues + " turns="+avgTimeSteps + " winRate="+winRate);
+		}
+	}
 }

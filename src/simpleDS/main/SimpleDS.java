@@ -17,8 +17,8 @@ import simpleDS.learning.SimpleAgent;
 import simpleDS.learning.SimpleEnvironment;
 import simpleDS.networking.SimpleSocketServer;
 import simpleDS.util.ConfigParser;
+import simpleDS.util.IOUtil;
 import simpleDS.util.StringUtil;
-import simpleDS.util.Logger;
 
 public class SimpleDS {
 	private ConfigParser configParser;
@@ -76,21 +76,13 @@ public class SimpleDS {
 				dict.put("action_sys_key", getSystemAction_Key(steps, i, false));
 				dict.put("action_sys_val", getSystemAction_Val(dict.get("action_sys_key")));
 				dict.put("response_sys", getSystemResponse(dict.get("action_sys_key")));
-				if (configParser.verbose) {
-					String sys = "["+dict.get("action_sys_key")+"] ["+dict.get("action_sys_val")+"] " +dict.get("response_sys");
-					Logger.debug("SympleDS", "IM", steps+" SYS:"+sys);
-				}
+				IOUtil.printSysTurn(dict, steps, configParser.verbose);
 
 				dict.put("action_usr_key", getUserAction_Key(dict.get("action_sys_key"), dict.get("action_sys_val")));
 				dict.put("response_usr", getUserResponse(dict.get("action_usr_key")));
 				dict.put("response_asr", getSpeechRecOutput(dict.get("response_usr")));
 				dict.put("action_usr_val", getUserAction_Val(dict.get("action_usr_key")));
-				if (dict.get("response_usr") != null && configParser.verbose) {
-					String usr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_usr");
-					String asr = "["+dict.get("action_usr_key")+"] ["+dict.get("action_usr_val")+"] " +dict.get("response_asr");
-					Logger.debug("SympleDS", "IM", steps+" USR:"+usr);
-					Logger.debug("SympleDS", "UM", steps+" USR:"+asr);
-				}
+				IOUtil.printUsrTurn(dict, steps, configParser.verbose);
 
 				environment.interactionPolicy.updateLastInfo(dict, environment.userSimulator);
 				if (endOfInteractionReached()) {
@@ -101,11 +93,8 @@ public class SimpleDS {
 				steps++;
 			}
 			numTimeSteps += steps;
-
-			if (i%100 == 0) {
-				double avgTimeSteps = (double) numTimeSteps/i;
-				Logger.debug(this.getClass().getName(), "InteractionManagement", "dialogues="+i + " turns="+avgTimeSteps);
-			}
+			double taskSuccess = 0; // TODO: implement this equation
+			IOUtil.printInteractionLength(i, numTimeSteps, taskSuccess);
 		}
 	}
 
@@ -135,10 +124,8 @@ public class SimpleDS {
 			}
 			simpleAgent.setLastAction(null);
 			String action = environment.interactionPolicy.simpleActions.getAction(learnedAction);
-			if (configParser.verbose) {
-				String reward = environment.interactionPolicy.getReward(rewards, learnedAction);
-				Logger.debug(this.getClass().getName(), "", "s="+stateWithNoise + " A="+actions + " a="+action + " r="+reward);
-			}
+			String reward = environment.interactionPolicy.getReward(rewards, learnedAction);
+			IOUtil.printLearningExperience(stateWithNoise, actions, action, reward, configParser.verbose);
 			return action;
 			
 		} else {
@@ -170,6 +157,7 @@ public class SimpleDS {
 		return environment.userSimulator.getAction_Unfolded(action_sys_val);
 	}
 
+	
 	private String getUserResponse(String action_usr_key) {
 		String response = environment.userSimulator.getResponse(action_usr_key);
 		String typedInput = configParser.getParamValue("TypedInputSupport");

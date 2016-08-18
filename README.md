@@ -41,8 +41,6 @@ EXECUTION
 
 >scripts/run.sh train
 
-![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS-train.png "Example screenshot of SimpleDS during training (Dialogues=2000, Verbose=false)")
-
 >[From the command line, press Ctrl+C for termination]
 
 or 
@@ -51,8 +49,6 @@ or
 
 >scripts/run.sh test
 
-![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS-test.png "Example screenshot of SimpleDS at test time (Dialogues=1, Verbose=true)")
-
 >[From the command line, press Ctrl+C for termination]
 
 Alternatively (recommended), you can run the system from two terminals:
@@ -60,6 +56,8 @@ Alternatively (recommended), you can run the system from two terminals:
 Terminal1:YourPath/SimpleDS>ant SimpleDS
 
 Terminal2:YourPath/SimpleDS/web/main>nodejs runclient.js (train|test) [num_dialogues] [-v|-nv]
+
+![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS.png "Example screenshot of SimpleDS at test time (Dialogues=1, Verbose=true)")
 
 For practical reasons, you can specify the number of dialogues and verbose mode from the command line. The values of these parameters would override the values specified in the file config.txt.
 
@@ -139,25 +137,14 @@ SocketServerPort=This number defines the socket port used for communication with
 
 You may want to set Verbose=false during training and Verbose=true during tests. You may also want to set a high number of dialogues during training (e.g. Dialogues=2000) and a low one during tests (e.g. Dialogues=1). You may want to change the system/user responses if you want different verbalisations. If this is the case, then you will also want to update the demonstration dialogues in the folder YourPath/SimpleDS/data/.
 
-CITATION
---------
-Please use the following reference if you use SimpleDS code or if you want to cite this work.
+REFERENCES
+----------
+SimpleDS has been applied to spoken dialogue systems and interactive games. See the following references for further information.
 
-@inproceedings{HC2016iwsds,
++ H. Cuayáhuitl. [SimpleDS: A simple deep reinforcement learning dialogue system](http://arxiv.org/abs/1601.04574). arXiv:1601.04574, 2016.
++ H. Cuayáhuitl, S. Keizer, O. Lemon. [Strategic Dialogue Management via Deep Reinforcement Learning](http://arxiv.org/abs/1511.08099). arXiv:1511.08099, 2015.
 
-  author    = {Heriberto Cuay\'ahuitl},
-  
-  title     = {{SimpleDS}: A Simple Deep Reinforcement Learning Dialogue System},
-  
-  booktitle = {International Workshop on Spoken Dialogue Systems (IWSDS)},
-  
-  url       = {http://arxiv.org/abs/1601.04574},
-  
-  year      = {2016},
-  
-}
-
-SimpleDS has been applied to [Strategic Dialogue Management](http://arxiv.org/abs/1511.08099), and can be applied to other interactive systems in a fairly straightforward way. See ["How to apply SimpleDS to interactive systems"](https://github.com/cuayahuitl/SimpleDS/blob/master/doc/How2UseSimpleDS.txt).
+See ["How to apply SimpleDS to interactive systems"](https://github.com/cuayahuitl/SimpleDS/blob/master/doc/How2UseSimpleDS.txt) if you would like to use SimpleDS in your own system.
 
 COMMENTS/QUESTIONS/COLLABORATIONS?
 -------------------

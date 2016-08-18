@@ -166,4 +166,9 @@ public class StringUtil {
 		
 		return probs;
 	}
+
+	public static String getTypedInput() {
+		Scanner input = new Scanner(System.in);
+		return input.nextLine();
+	}
 }

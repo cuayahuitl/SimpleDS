@@ -17,6 +17,7 @@ import simpleDS.learning.SimpleAgent;
 import simpleDS.learning.SimpleEnvironment;
 import simpleDS.networking.SimpleSocketServer;
 import simpleDS.util.ConfigParser;
+import simpleDS.util.StringUtil;
 import simpleDS.util.Logger;
 
 public class SimpleDS {
@@ -171,9 +172,14 @@ public class SimpleDS {
 
 	private String getUserResponse(String action_usr_key) {
 		String response = environment.userSimulator.getResponse(action_usr_key);
-		
+		String typedInput = configParser.getParamValue("TypedInputSupport");
+
 		if (socketServer != null && response != null){
 			response = socketServer.listen();
+
+		} else if (typedInput.equals("true") && response != null) {
+			response = StringUtil.getTypedInput().toLowerCase();
+			environment.userSimulator.updateUserGoal(response);
 		}
 		
 		return response;
@@ -182,7 +188,7 @@ public class SimpleDS {
 	private String getSpeechRecOutput(String response_usr) {
 		if (socketServer != null){
 			String response_asr = environment.getRealSpeechRecognitionOutput(response_usr);
-			environment.userSimulator.updateUserGoal(response_asr);
+			environment.userSimulator.updateUserGoal(response_asr.toLowerCase());
 			return response_asr;
 			
 		} else {

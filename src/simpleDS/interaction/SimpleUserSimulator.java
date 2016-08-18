@@ -103,16 +103,27 @@ public class SimpleUserSimulator {
 		
 	public void updateUserGoal(String response_asr) {
 		if (response_asr == null || response_asr.equals("")) return;
-	
+		
 		for (String slot : slots.keySet()) {
 			String slotValues = slots.get(slot);
 
 			for (String value : StringUtil.getArrayListFromString(slotValues, "|\"")) {
-				if (response_asr.indexOf(value) >= 0) {
+
+				if (isSlotValue_Valid(value, response_asr)) {
 					usrGoal.put(slot, value);
 				}
 			}
 		}
+	}
+	
+	public boolean isSlotValue_Valid(String value, String response_asr) {
+		for (String token : StringUtil.getArrayListFromString(value, " ")) {
+			if (response_asr.indexOf(token) == -1) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public HashMap<String,String> getUsrGoal() {

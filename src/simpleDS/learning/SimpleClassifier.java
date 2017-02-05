@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import simpleDS.util.Logger;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.lazy.IBk;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -21,12 +22,14 @@ import weka.core.converters.ConverterUtils.DataSource;
 public class SimpleClassifier {
 	private Instances instances;
 	private NaiveBayes classifier;
+	private IBk ruler;
 	private double minimumProbability;
 
 	public SimpleClassifier(String trainingFile, String minimumProbability) {
 		this.minimumProbability = Double.parseDouble(minimumProbability);
 		loadData(trainingFile);
 		trainModel();
+		trainRuler();
 	}
 
 	public void loadData(String trainingFile) {		
@@ -46,6 +49,17 @@ public class SimpleClassifier {
 			classifier = new NaiveBayes();
 			classifier.buildClassifier(instances);
 			Logger.debug(this.getClass().getName(), "trainModel", "Model created!");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void trainRuler() {
+		try {
+			ruler = new IBk();
+			ruler.buildClassifier(instances);
+			Logger.debug(this.getClass().getName(), "trainRuler", "Model created!");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,5 +156,32 @@ public class SimpleClassifier {
 		}
 
 		return output;
+	}
+
+	public String getBestRuleBasedAction(HashMap<String,String> evidence) {
+		try {
+			Instance firstInstance = createInstance(evidence);
+			Attribute attribute = firstInstance.attribute(instances.numAttributes()-1);
+			double[] dist = ruler.distributionForInstance(firstInstance);
+			
+			double bestScore = 0;
+			String bestAction = "";
+			for (int i=0; i<dist.length; i++) {
+				String attValue = attribute.value(i);
+				if (dist[i]>bestScore) {
+					bestScore = dist[i];
+					bestAction = attValue;
+				}
+			}
+
+			return bestAction;
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		return null;	
 	}
 }

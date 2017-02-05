@@ -24,3 +24,4 @@ BatchSize=32
 TypedInputSupport=false
 AndroidSupport=false
 SocketServerPort=2015
+UseRuleBasedBehaviour=false

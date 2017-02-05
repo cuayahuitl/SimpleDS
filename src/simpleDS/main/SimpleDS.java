@@ -110,7 +110,7 @@ public class SimpleDS {
 		String stateWithoutNoise = environment.getEnvironmentState(false);
 		String actions = environment.interactionPolicy.getAllowedActions(stateWithoutNoise, steps);
 
-		if (simpleAgent != null) {
+		if (simpleAgent != null && !configParser.getParamValue("UseRuleBasedBehaviour").equals("true")) {
 			String rewards = environment.interactionPolicy.getRewards(stateWithoutNoise, actions, end, steps);
 			simpleAgent.sendMessage("state="+stateWithNoise+"|actions="+actions+"|rewards="+rewards+"|dialogues="+dialogues);
 			String learnedAction = null;
@@ -127,7 +127,11 @@ public class SimpleDS {
 			String reward = environment.interactionPolicy.getReward(rewards, learnedAction);
 			IOUtil.printLearningExperience(stateWithNoise, actions, action, reward, configParser.verbose);
 			return action;
-			
+		
+		} else if (simpleAgent != null && configParser.getParamValue("UseRuleBasedBehaviour").equals("true")) {
+			String actionID = environment.interactionPolicy.simpleActions.getRuleBasedAction(stateWithoutNoise);
+			return environment.interactionPolicy.simpleActions.getAction(actionID);
+
 		} else {
 			String randomAction = environment.interactionPolicy.simpleActions.getRandomAction(actions);
 			String action = environment.interactionPolicy.simpleActions.getAction(randomAction);

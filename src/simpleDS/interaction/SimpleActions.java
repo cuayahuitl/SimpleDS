@@ -101,6 +101,10 @@ public class SimpleActions {
 		}
 	}
 
+	public String getRuleBasedAction(String state) {
+		return actionPredictor.getBestRuleBasedAction(getEvidence(state));
+	}
+
 	public HashMap<String,String> getEvidence(String state) {
 		HashMap<String,String> evidence = new HashMap<String,String>();
 		ArrayList<String> features = StringUtil.getArrayListFromString(state, ",");

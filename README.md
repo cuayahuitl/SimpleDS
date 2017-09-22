@@ -141,7 +141,7 @@ REFERENCES
 ----------
 SimpleDS has been applied to spoken dialogue systems and interactive games. See the following references for further information.
 
-+ H. Cuayáhuitl. [Deep Reinforcement Learning for Conversational Robots Playing Games]. To Appear in IEEE RAS International Conference on Humanoid Robots (HUMANOIDS), 2017.
++ H. Cuayáhuitl. Deep Reinforcement Learning for Conversational Robots Playing Games. To Appear in IEEE RAS International Conference on Humanoid Robots (HUMANOIDS), 2017.
 + H. Cuayáhuitl, S. Yu. [Deep Reinforcement Learning of Dialogue Policies with Less Weight Updates](http://eprints.lincoln.ac.uk/27676/1/multids-interspeech2017.pdf). International Conference of the Speech Communication Association (INTERSPEECH), 2017.
 + H. Cuayáhuitl, S. Yu, A. Williamson, J. Carse. [Scaling Up Deep Reinforcement Learning for Multi-Domain Dialogue Systems](http://eprints.lincoln.ac.uk/26622/1/PID4664349.pdf). International Joint Conference on Neural Networks (IJCNN), 2017.
 + H. Cuayáhuitl, S. Yu, A. Williamson, J. Carse. [Deep Reinforcement Learning for Multi-Domain Dialogue Systems](https://arxiv.org/pdf/1611.08675.pdf). NIPS Workshop on Deep Reinforcement Learning, 2016.

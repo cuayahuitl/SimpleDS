@@ -146,7 +146,7 @@ SimpleDS has been applied to spoken dialogue systems and interactive games. See 
 + H. Cuayáhuitl, S. Yu, A. Williamson, J. Carse. [Scaling Up Deep Reinforcement Learning for Multi-Domain Dialogue Systems](http://eprints.lincoln.ac.uk/26622/1/PID4664349.pdf). International Joint Conference on Neural Networks (IJCNN), 2017.
 + H. Cuayáhuitl, S. Yu, A. Williamson, J. Carse. [Deep Reinforcement Learning for Multi-Domain Dialogue Systems](https://arxiv.org/pdf/1611.08675.pdf). NIPS Workshop on Deep Reinforcement Learning, 2016.
 + H. Cuayáhuitl, G. Couly, G. Olalainty. [Training an Interactive Humanoid Robot Using Multimodal Deep Reinforcement Learning](https://arxiv.org/pdf/1611.08666.pdf). NIPS Workshop on the Future of Interactive Learning Machines, 2016.
-+ H. Cuayáhuitl. [SimpleDS: A Simple Deep Reinforcement Learning Dialogue System](http://arxiv.org/abs/1601.04574). International Workshop on Spoken Dialogue Systems (IWSDS), 2016.
++ H. Cuayáhuitl. [SimpleDS: A Simple Deep Reinforcement Learning Dialogue System](http://arxiv.org/abs/1601.04574). Dialogues with Social Robots, Lecture Notes in Electrical Engineering, Springer, 2016.
 + H. Cuayáhuitl, S. Keizer, O. Lemon. [Strategic Dialogue Management via Deep Reinforcement Learning](https://arxiv.org/pdf/1511.08099v1.pdf). NIPS Workshop on Deep Reinforcement Learning, 2015.
 
 See ["How to apply SimpleDS to interactive systems"](https://github.com/cuayahuitl/SimpleDS/blob/master/doc/How2UseSimpleDS.txt) if you would like to use SimpleDS in your own system.

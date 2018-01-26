@@ -9,6 +9,7 @@ package simpleDS.learning;
 
 import java.util.ArrayList;
 
+import simpleDS.learning.SimpleAgent;
 import simpleDS.networking.SimpleWebServer;
 import simpleDS.networking.SimpleSocketHandler;
 import simpleDS.util.Logger;

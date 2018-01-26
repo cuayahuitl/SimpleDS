@@ -68,4 +68,14 @@
             <classpath refid="SimpleDialogueSystem.classpath"/>
         </java>
     </target>
+    <target name="SimpleDS_ImageRecognitionTrainer">
+        <java classname="simpleDS.pixels.ImageRecognitionTrainer" failonerror="true" fork="yes">
+            <classpath refid="SimpleDialogueSystem.classpath"/>
+        </java>
+    </target>
+    <target name="SimpleDS_ImageRecognitionTester">
+        <java classname="simpleDS.pixels.ImageRecognitionTester" failonerror="true" fork="yes">
+            <classpath refid="SimpleDialogueSystem.classpath"/>
+        </java>
+    </target>
 </project>

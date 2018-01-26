@@ -25,3 +25,8 @@ TypedInputSupport=false
 AndroidSupport=false
 SocketServerPort=2015
 UseRuleBasedBehaviour=false
+
+SocketServerPixels=false
+SocketServerPixelsPort=5050
+SavingFrequencyPixels=1000
+PixelDataPath=data/pixels/digits

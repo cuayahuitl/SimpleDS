@@ -69,6 +69,8 @@ or
 
 The latter generates an image of the plot in png (Portable Network Graphics) format. The file plotdata.m can also be used from Matlab if that software is prefered. The following learning curves (available from YourPath/results/*/*.png) can be obtained with the default parameters for the supported languages: [English](https://github.com/cuayahuitl/SimpleDS/blob/master/results/english/simpleds-output.png), [German](https://github.com/cuayahuitl/SimpleDS/blob/master/results/german/simpleds-output.png) and [Spanish](https://github.com/cuayahuitl/SimpleDS/blob/master/results/spanish/simpleds-output.png).
 
+The following learning curve was generated from image-based supervised learning learning: [spectrogram](https://github.com/cuayahuitl/SimpleDS/blob/master/results/pixels/simpleds-output.png).
+
 CONFIGURATION
 -------------
 The config file "YourPath/SimpleDialogueSystem/config.txt" has a number parameters number of dialogues, verbose outputs, saving frequency, etc. You may want to set Verbose=false during training and Verbose=true during testing. You may also want to set a high number of dialogues during training (e.g. Dialogues=2000) and a low one during tests (e.g. Dialogues=1). You may want to change the system/user responses if you want different verbalisations. If this is the case, then you will also want to update the demonstration dialogues in the folder YourPath/SimpleDS/data/.

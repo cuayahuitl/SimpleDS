@@ -8,21 +8,7 @@ import cv2
 from wavwrapper import wavfile, monowrapper
 from windowing import overlapped_window
 
-# Attempt to load progressbar2 library. If it is not available, declare
-# a stub ProgressBar class that does nothing.
-try:
-    from progressbar import ProgressBar
-except:
-    class ProgressBar (object):
-        def __init__(*args, **kwargs):
-            pass
-        def update(self, x):
-            pass
-        def finish(self):
-            pass
-
-def trim(image):
-	imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def trim(imgray):
 	lower_xx = 0
 	lower_yy = 0
 	higher_xx = 0
@@ -80,17 +66,12 @@ def main(input_file=None, window_size="256", scale="log"):
     # Y will hold the DFT of each window. We use acc and bar for displaying progress.
     Y = []
     acc = 0
-    bar = ProgressBar(max_value=w.get_param('nframes') * overlap)
     
     # Process each window of audio.
     for x in overlapped_window(monowrapper(w), window_size, overlap):
         y = np.fft.rfft(x * hann)[:window_size//2]
         Y.append(y)
         acc += window_size
-        bar.update(acc)
-    
-    # Inform progress bar that the computation is complete.
-    bar.finish()
     
     # Normalize data and convert to dB.
     Y = np.column_stack(Y)
@@ -119,34 +100,23 @@ def main(input_file=None, window_size="256", scale="log"):
             warnings.warn('You are using matplotlib 1.3.* (and not >= 1.4.0). Therefore linscaley must equal 1, not 0.25')
         plt.yscale('symlog', linthreshy=100, linscaley=yscale)
         ax.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    
-    ## Set x/y limits by using the maximums from the time/frequency arrays.
-    #plt.xlim(0, t[-1])
-    #plt.ylim(0, f[-1])
-    
-    ## Set axis labels.
-    #plt.xlabel("Time (s)")
-    #plt.ylabel("Frequency (Hz)")
-    
-    ## Show legend and set label.
-    #cbar = plt.colorbar()
-    #cbar.set_label("Intensity (dB)")
-    
-    # Display spectrogram.
-    #plt.figimage(arr,cmap=cm.Greys_r)
-    #plt.show()
 
-    # Turn off tick labels
     plt.axis('off')
 
-    # Save plot as image
+    # Save plot as png file
     array = input_file.split(".wav")
     img_filename = array[0]+"_digits.png"
     plt.savefig(img_filename)
 
     # Save image with trimmed margins
     im = cv2.imread(img_filename)
-    cv2.imwrite(img_filename, trim(im))
+    im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    im_trimmed = trim(im_gray)
+    cv2.imwrite(img_filename, im_trimmed)
+    plt.subplot(131),plt.imshow(im),plt.title('Original')
+    plt.subplot(132),plt.imshow(im_gray),plt.title('Gray')
+    plt.subplot(133),plt.imshow(im_trimmed),plt.title('Trimmed')
+    plt.show()
 
     return 0
 

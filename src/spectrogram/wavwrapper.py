@@ -15,12 +15,18 @@ class monowrapper (object):
         return data
 
 class wavfile (object):
+    _wav = None
 
-    def __init__(self, input_file):
-        self._wav = wave.open(input_file, 'r')
+    def __init__(self, wav):
+        self._wav = wav
         self._parms = wavfile.parse_params(self._wav.getparams())
         self._dtype = wavfile.dtype_for(self._parms.sampwidth)
-        
+
+    #def __init__(self, input_file):
+    #    self._wav = wave.open(input_file, 'r')
+    #    self._parms = wavfile.parse_params(self._wav.getparams())
+    #    self._dtype = wavfile.dtype_for(self._parms.sampwidth)
+
     def read(self, num_frames):
         return self.format_frames(self._wav.readframes(num_frames))
     

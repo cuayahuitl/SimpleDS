@@ -14,6 +14,7 @@ class AudioRecorder(object):
 	SAMPLE_RATE=8000
 	CHUNK=1024
 	DURATION_SECS=1
+	MAX_FRAMES = 7
 	filename = None
 	audio = None
 	stream = None
@@ -21,12 +22,16 @@ class AudioRecorder(object):
 
 	def __init__(self, filename):
 		self.filename = filename
-		self.audio = pyaudio.PyAudio()
-		self.stream = self.audio.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.SAMPLE_RATE, input=True, frames_per_buffer=self.CHUNK)
+
+		self.start_stream()
+
 		if self.filename is None:
+			self.filename = "test.wav"
 			self.online_recorder()
 		else:
 			self.offline_recorder()
+
+		self.stop_stream()
 
 	def save_wavefile(self):
 		wavefile = wave.open(self.filename, 'wb')
@@ -36,17 +41,19 @@ class AudioRecorder(object):
 		wavefile.writeframes(b''.join(self.frames))
 		wavefile.close()
 
+	def start_stream(self):
+		self.audio = pyaudio.PyAudio()
+		self.stream = self.audio.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.SAMPLE_RATE, input=True, frames_per_buffer=self.CHUNK)
+
 	def stop_stream(self):
 		self.stream.stop_stream()
 		self.stream.close()
 		self.audio.terminate()
 
 	def online_recorder(self):
-		self.filename = "test.wav"
-
 		while True:
 			self.frames = []
-			data = self.stream.read(self.CHUNK*7)
+			data = self.stream.read(self.CHUNK*self.MAX_FRAMES)
 			self.frames.append(data)
 
 			self.save_wavefile()
@@ -57,15 +64,11 @@ class AudioRecorder(object):
 			if c == 27:
 				break
 
-		self.stop_stream()
-
-	def offline_recorder(self, filename):
-		self.frames = []
+	def offline_recorder(self):
 		for i in range(0, int(self.SAMPLE_RATE/(self.CHUNK*self.DURATION_SECS))):
 			data = self.stream.read(self.CHUNK)
 			self.frames.append(data)
 
-		self.stop_stream()
 		self.save_wavefile()
 		self.get_spectrogram()
 		self.save_spectrogram()
@@ -108,7 +111,7 @@ class AudioRecorder(object):
 
 		plt.axis('off')
 
-	def trim(self, imgray):
+	def trim_spectrogram(self, imgray):
 		lower_xx = 0
 		lower_yy = 0
 		higher_xx = 0
@@ -138,8 +141,9 @@ class AudioRecorder(object):
 
 		im = cv2.imread(img_filename)
 		im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-		im_trimmed = self.trim(im_gray)
-		cv2.imwrite(img_filename, im_trimmed)
+		im_trimmed = self.trim_spectrogram(im_gray)
+		im_resized = cv2.resize(im_trimmed, (100,100))
+		cv2.imwrite(img_filename, im_resized)
 		cv2.imshow('Spectrogram', im_trimmed)
 
 filename = sys.argv[1] if len(sys.argv) == 2 else None

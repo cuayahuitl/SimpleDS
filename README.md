@@ -3,7 +3,7 @@ A Simple Deep Reinforcement Learning Dialogue System
 
 DESCRIPTION
 -----------
-SimpleDS is a computational framework for training dialogue systems with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from raw (noisy) text or word embeddings of the last system and user responses -- from raw audio in progress. The motivation is to train dialogue agents with as little human intervention as possible.
+SimpleDS is a computational framework for training task-oriented dialogue systems with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from either raw (noisy) text or word embeddings of the last system and user responses -- support from raw audio in progress. The motivation is to train dialogue agents with as little human intervention as possible.
 
 This system runs under a client-server architecture, where the learning agent (in JavaScript) acts as the "client" and the environment (in Java) acts as the "server". They communicate by exchanging messages, where the client tells the client the action to execute, and the server tells the client the actions available, environment state and rewards observed. SimpleDS is a (spoken) dialogue system on top of [ConvNetJS](http://cs.stanford.edu/people/karpathy/convnetjs/) with support for multi-threaded and client-server processing, and fast learning via constrained search spaces.
 

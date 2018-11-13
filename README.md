@@ -3,7 +3,7 @@ A Simple Deep Reinforcement Learning Dialogue System
 
 DESCRIPTION
 -----------
-SimpleDS is a simple dialogue system trained with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from raw (noisy) text of the last system and user responses -- soon from raw audio. The motivation is to train dialogue agents with as little human intervention as possible.
+SimpleDS is a computational framework for training dialogue systems with deep reinforcement learning. In contrast to other dialogue systems, this system selects dialogue actions directly from raw (noisy) text or word embeddings of the last system and user responses -- from raw audio in progress. The motivation is to train dialogue agents with as little human intervention as possible.
 
 This system runs under a client-server architecture, where the learning agent (in JavaScript) acts as the "client" and the environment (in Java) acts as the "server". They communicate by exchanging messages, where the client tells the client the action to execute, and the server tells the client the actions available, environment state and rewards observed. SimpleDS is a (spoken) dialogue system on top of [ConvNetJS](http://cs.stanford.edu/people/karpathy/convnetjs/) with support for multi-threaded and client-server processing, and fast learning via constrained search spaces.
 
@@ -29,6 +29,8 @@ You can also download the system as a zip file using the following URL,
 and then unzip it in your path of preference. 
 https://github.com/cuayahuitl/SimpleDS/archive/master.zip 
 
+You should download pre-trained word vectors if you want support for word embeddings, e.g. http://nlp.stanford.edu/data/glove.6B.zip and put the text file of your choice under YourPath/SimpleDS/resources/English. Apply the same procedure for other languages.
+
 COMPILATION
 -----------
 >cd YourPath/SimpleDS
@@ -43,7 +45,7 @@ Terminal1:YourPath/SimpleDS>ant SimpleDS
 
 Terminal2:YourPath/SimpleDS/web/main>nodejs runclient.js (train|test) [num_dialogues] [-v|-nv]
 
-![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS.png "Example screenshot of SimpleDS at test time (Dialogues=1, Verbose=true)")
+![Alt text](https://github.com/cuayahuitl/SimpleDS/blob/master/screenshots/Screenshot-SimpleDS-WordEmbedding.png "Example screenshot of SimpleDS at test time (Dialogues=1, Verbose=true)")
 
 For practical reasons, you can specify the number of dialogues and verbose mode from the command line. The values of these parameters would override the values specified in the file config.txt.
 
@@ -67,7 +69,7 @@ or
 
 >[From the command line, press the space bar key for termination]
 
-The latter generates an image of the plot in png (Portable Network Graphics) format. The file plotdata.m can also be used from Matlab if that software is prefered. The following learning curves (available from YourPath/results/*/*.png) can be obtained with the default parameters for the supported languages: [English](https://github.com/cuayahuitl/SimpleDS/blob/master/results/english/simpleds-output.png), [German](https://github.com/cuayahuitl/SimpleDS/blob/master/results/german/simpleds-output.png) and [Spanish](https://github.com/cuayahuitl/SimpleDS/blob/master/results/spanish/simpleds-output.png).
+The latter generates an image of the plot in png (Portable Network Graphics) format. The file plotdata.m can also be used from Matlab if that software is prefered. The following learning curves (available from YourPath/results/*/*.png) can be obtained with the default parameters for the supported languages: [English](https://github.com/cuayahuitl/SimpleDS/blob/master/results/english/simpleds-output-wordembedding.png), [German](https://github.com/cuayahuitl/SimpleDS/blob/master/results/german/simpleds-output.png) and [Spanish](https://github.com/cuayahuitl/SimpleDS/blob/master/results/spanish/simpleds-output.png).
 
 The following learning curve was generated from image-based supervised learning learning: [spectrogram](https://github.com/cuayahuitl/SimpleDS/blob/master/results/pixels/simpleds-output.png).
 
@@ -79,7 +81,7 @@ REFERENCES
 ----------
 SimpleDS has been applied to spoken dialogue systems and interactive games. See the following references for further information.
 
-+ H. Cuayáhuitl. [Deep Reinforcement Learning for Conversational Robots Playing Games](http://eprints.lincoln.ac.uk/29060/). To Appear in IEEE RAS International Conference on Humanoid Robots (HUMANOIDS), 2017.
++ H. Cuayáhuitl. [Deep Reinforcement Learning for Conversational Robots Playing Games](http://eprints.lincoln.ac.uk/29060/). In IEEE RAS International Conference on Humanoid Robots (HUMANOIDS), 2017.
 + H. Cuayáhuitl, S. Yu. [Deep Reinforcement Learning of Dialogue Policies with Less Weight Updates](http://eprints.lincoln.ac.uk/27676/1/multids-interspeech2017.pdf). International Conference of the Speech Communication Association (INTERSPEECH), 2017.
 + H. Cuayáhuitl, S. Yu, A. Williamson, J. Carse. [Scaling Up Deep Reinforcement Learning for Multi-Domain Dialogue Systems](http://eprints.lincoln.ac.uk/26622/1/PID4664349.pdf). International Joint Conference on Neural Networks (IJCNN), 2017.
 + H. Cuayáhuitl, S. Yu, A. Williamson, J. Carse. [Deep Reinforcement Learning for Multi-Domain Dialogue Systems](https://arxiv.org/pdf/1611.08675.pdf). NIPS Workshop on Deep Reinforcement Learning, 2016.

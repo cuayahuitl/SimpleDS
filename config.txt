@@ -6,6 +6,7 @@ UsrResponses=resources/%Language%/UsrResponses.txt
 SlotValues=resources/%Language%/SlotValues.txt
 DemonstrationsPath=data/%Language%
 DemonstrationsFile=models/demonstrations.arff
+WordEmbeddingsFile=resources/%Language%/glove.6B.50d.txt
 MinimumProbability=0.001
 SlotsToConfirm=3
 NoiseLevel=0

@@ -73,7 +73,8 @@ public class SimpleClassifier {
 			Attribute attribute = (Attribute) instances.attribute(i);
 
 			if (attribute.isNumeric()) {
-				int val = Integer.parseInt(evidence.get(attribute.name()));
+				//int val = Integer.parseInt(evidence.get(attribute.name()));
+				float val = Float.parseFloat(evidence.get(attribute.name()));
 				firstInstance.setValue(attribute, val);
 
 			} else {

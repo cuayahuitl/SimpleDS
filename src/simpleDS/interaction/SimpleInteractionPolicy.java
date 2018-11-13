@@ -64,7 +64,10 @@ public class SimpleInteractionPolicy {
 	public void setSlots(String lastUsrAction) {
 		String lastSysAction = lastInfo.get("LastSysAction_Val");
 		
-		if (lastSysAction.indexOf("Confirm")>=0) {
+		if (lastSysAction == null) {
+			// nothing to update
+
+		} else if (lastSysAction.indexOf("Confirm")>=0) {
 			String slotValuePairs = lastSysAction.substring(lastSysAction.indexOf("(")+1, lastSysAction.indexOf(")"));
 			for (String pair : StringUtil.getArrayListFromString(slotValuePairs, ",")) {
 				String slot = pair.indexOf("=")>0 ? pair.substring(0, pair.indexOf("=")) : pair;

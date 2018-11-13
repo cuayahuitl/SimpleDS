@@ -5,7 +5,8 @@
  * 
  * @history 2.Nov.2015 Beta version
  *          5.Nov.2015 Methods for returning simulated and real speech recognition outputs.
- *              
+ *          7.Nov.2018 Support for environment states derived from Glove-based word embeddings.
+ *          
  * @author <ahref="mailto:h.cuayahuitl@gmail.com">Heriberto Cuayahuitl</a>
  */
 
@@ -21,9 +22,11 @@ import simpleDS.util.IOUtil;
 import simpleDS.util.Logger;
 import simpleDS.util.StringUtil;
 import simpleDS.util.Vocabulary;
+import simpleDS.util.WordEmbedding;
 
 public class SimpleEnvironment {
 	private Vocabulary vocabulary;
+	private WordEmbedding wordEmbedding;
 	private boolean verbose = false;
 	public SimpleUserSimulator userSimulator;
 	public SimpleInteractionPolicy interactionPolicy;
@@ -37,16 +40,19 @@ public class SimpleEnvironment {
 		String demonstrationsPath = configurations.get("DemonstrationsPath");
 		String demonstrationsFile = configurations.get("DemonstrationsFile");
 		String minimumProbability = configurations.get("MinimumProbability");
+		String wordEmbeddingsFile = configurations.get("WordEmbeddingsFile");
 		
 		userSimulator = new SimpleUserSimulator(configurations);
 		interactionPolicy = new SimpleInteractionPolicy(configurations);
 		vocabulary = new Vocabulary(sysResponsesFile, usrResponsesFile, slotsFile);
+		wordEmbedding = new WordEmbedding(wordEmbeddingsFile);
 		generateTrainingDataFromDemonstrations(demonstrationsPath, demonstrationsFile);
 		interactionPolicy.simpleActions.createActionPredictor(demonstrationsFile, minimumProbability);
 	}
 	
 	public String getNumInputOutputs() {
-		int inputs = vocabulary.getVocabularySize();
+		int dimensionality = wordEmbedding.getEmbeddingDimensionality();
+		int inputs = dimensionality==0 ? vocabulary.getVocabularySize() : dimensionality*2;
 		int outputs = interactionPolicy.simpleActions.getActionSetSize();
 		return inputs+","+outputs;
 	}
@@ -54,9 +60,9 @@ public class SimpleEnvironment {
 	public String getEnvironmentState(boolean withNoise) {
 		String lastSysResponse = interactionPolicy.getLastInfoParam("LastSysResponse");
 		String lastUsrResponse = interactionPolicy.getLastInfoParam("LastUsrResponse");
-		ArrayList<String> allFeatures = getWordFeaturesFromParam(lastSysResponse, lastUsrResponse, withNoise);
-
 		String state = "";
+
+		ArrayList<String> allFeatures = getWordFeaturesFromParam(lastSysResponse, lastUsrResponse, withNoise);
 		for (String feature : allFeatures) {
 			state += state.equals("") ? feature : ","+feature;
 		}
@@ -93,20 +99,34 @@ public class SimpleEnvironment {
 	private ArrayList<String> getWordFeaturesFromParam(String lastSysResponse, String lastUsrResponse, boolean withNoise) {
 		ArrayList<String> featureVector = new ArrayList<String>();
 
-		ArrayList<String> wordsSysResponse = vocabulary.extractWordsFromSequence(lastSysResponse);
-		ArrayList<String> wordsUsrResponse = vocabulary.extractWordsFromSequence(lastUsrResponse);
-		HashMap<String,Float> lastConfScores = interactionPolicy.getLastConfidenceScores();
-
-		for (String word : vocabulary.getWordList()) {
-			String value = wordsSysResponse.contains(word) ? "1" : "0";
-			if (wordsUsrResponse.contains(word)) {
-				if (withNoise) {
-					value = ""+lastConfScores.get(word).floatValue();
-				} else {
-					value = "1";
-				}
+		if (wordEmbedding.available) {
+			//ArrayList<String> meanWordVector_Sys = wordEmbedding.getMeanWordVector(lastSysResponse);
+			//ArrayList<String> meanWordVector_Usr = wordEmbedding.getMeanWordVector(lastUsrResponse);
+			featureVector.addAll(wordEmbedding.getMeanWordVector(lastSysResponse));
+			featureVector.addAll(wordEmbedding.getMeanWordVector(lastUsrResponse));
+			/*for (String feature : meanWordVector_Sys) {
+				state += state.equals("") ? feature : ","+feature;
 			}
-			featureVector.add(value);
+			for (String feature : meanWordVector_Usr) {
+				state += state.equals("") ? feature : ","+feature;
+			}*/
+
+		} else {
+			ArrayList<String> wordsSysResponse = vocabulary.extractWordsFromSequence(lastSysResponse);
+			ArrayList<String> wordsUsrResponse = vocabulary.extractWordsFromSequence(lastUsrResponse);
+			HashMap<String,Float> lastConfScores = interactionPolicy.getLastConfidenceScores();
+
+			for (String word : vocabulary.getWordList()) {
+				String value = wordsSysResponse.contains(word) ? "1" : "0";
+				if (wordsUsrResponse.contains(word)) {
+					if (withNoise) {
+						value = ""+lastConfScores.get(word).floatValue();
+					} else {
+						value = "1";
+					}
+				}
+				featureVector.add(value);
+			}
 		}
 
 		return featureVector;
@@ -162,12 +182,25 @@ public class SimpleEnvironment {
 	}
 
 	public String getTrainingInstance(String sysResponse, String usrResponse, String sysActionID) {
-		ArrayList<String> allFeatures = getWordFeaturesFromParam(sysResponse, usrResponse, false);
-
 		String instance = "";
-		for (String feature : allFeatures) {
-			instance += instance.equals("") ? feature : ","+feature;
+
+		if (wordEmbedding.available) {
+			ArrayList<String> meanWordVector_Sys = wordEmbedding.getMeanWordVector(sysResponse);
+			ArrayList<String> meanWordVector_Usr = wordEmbedding.getMeanWordVector(usrResponse);
+			for (String feature : meanWordVector_Sys) {
+				instance += instance.equals("") ? feature : ","+feature;
+			}
+			for (String feature : meanWordVector_Usr) {
+				instance += instance.equals("") ? feature : ","+feature;
+			}
+
+		} else {
+			ArrayList<String> allFeatures = getWordFeaturesFromParam(sysResponse, usrResponse, false);
+			for (String feature : allFeatures) {
+				instance += instance.equals("") ? feature : ","+feature;
+			}
 		}
+
 		instance += ","+sysActionID;
 
 		return instance;
@@ -181,9 +214,12 @@ public class SimpleEnvironment {
 			actions = actions.substring(actions.indexOf("[")+1, actions.indexOf("]"));
 			actions += ","+this.interactionPolicy.simpleActions.getActionSetSize();
 
+			int numFeatures = this.wordEmbedding.getEmbeddingDimensionality();
+			numFeatures = (!wordEmbedding.available) ? this.getVocabulary().size() : numFeatures*2;
+
 			output.add("@relation demonstrations4ActionPrediction");
 			output.add("");
-			for (int i=1; i<=this.getVocabulary().size(); i++) {
+			for (int i=1; i<=numFeatures; i++) {
 				output.add("@attribute word"+i+" NUMERIC");
 			}
 			output.add("@attribute action {"+actions+"}");

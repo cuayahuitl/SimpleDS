@@ -167,6 +167,24 @@ public class StringUtil {
 		return probs;
 	}
 
+	public static String getWordWithoutPunctuation(String input) {
+		String output = "";
+		String symbols = ".,;:!?'\"";
+
+		ArrayList<String> chars = new ArrayList<String>();
+		for (String symbol : symbols.split("")) {
+			chars.add(symbol);
+		}
+
+		for (int i=0; i<input.length(); i++) {
+			Character charInFocus = input.charAt(i);
+			if (chars.contains(""+charInFocus)) continue;
+			output += charInFocus;
+		} 
+
+		return output.toLowerCase();
+	}
+
 	@SuppressWarnings("resource")
 	public static String getTypedInput() {
 		Scanner scanner = new Scanner(System.in);
